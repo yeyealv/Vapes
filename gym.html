@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gym Karen - Fuerza y Disciplina</title>
+
+  <!-- Font Awesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==============================
+       VARIABLES Y RESET GENERAL
+    ============================== */
+    :root {
+      --negro: #0a0a0a;
+      --gris-oscuro: #1a1a1a;
+      --gris-medio: #2c2c2c;
+      --gris-claro: #555;
+      --blanco: #f5f5f5;
+      --morado: #7c3aed;
+      --morado-oscuro: #5b21b6;
+      --morado-claro: #a855f7;
+      --amarillo: #f4a923;
+      --fuente-titulo: 'Bebas Neue', sans-serif;
+      --fuente-texto: 'Roboto', sans-serif;
+      --transicion: 0.3s ease;
+      --sombra: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--fuente-texto);
+      background-color: var(--negro);
+      color: var(--blanco);
+      line-height: 1.6;
+    }
+
+    /* ==============================
+       ESTILOS REUTILIZABLES
+    ============================== */
+    .seccion {
+      padding: 80px 20px;
+    }
+
+    .contenedor {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .titulo-seccion {
+      font-family: var(--fuente-titulo);
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .linea-morada {
+      width: 60px;
+      height: 4px;
+      background: var(--morado);
+      margin: 0 auto 50px;
+      border-radius: 2px;
+    }
+
+    /* ==============================
+       HEADER Y NAVEGACIÓN
+    ============================== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--morado);
+      padding: 0 20px;
+      transition: var(--transicion);
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .logo {
+      font-family: var(--fuente-titulo);
+      font-size: 2rem;
+      letter-spacing: 3px;
+      color: var(--blanco);
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--morado-claro);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: var(--blanco);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color var(--transicion);
+    }
+
+    .nav-links a:hover {
+      color: var(--morado-claro);
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--blanco);
+      border-radius: 2px;
+      transition: var(--transicion);
+    }
+
+    /* ==============================
+       SECCIÓN HERO (INICIO)
+    ============================== */
+    #inicio {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 100px 20px 60px;
+      background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80') center/cover no-repeat;
+    }
+
+    .hero-contenido {
+      max-width: 800px;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero-contenido p.subtitulo {
+      font-size: 1rem;
+      letter-spacing: 4px;
+      color: var(--amarillo);
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .hero-contenido h1 {
+      font-family: var(--fuente-titulo);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 1;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 20px rgba(0,0,0,0.8);
+    }
+
+    .hero-contenido h1 span {
+      color: var(--morado-claro);
+    }
+
+    .hero-contenido p.descripcion {
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 550px;
+      margin: 0 auto 35px;
+      color: #ccc;
+    }
+
+    .btn-principal {
+      display: inline-block;
+      background: var(--morado);
+      color: var(--blanco);
+      text-decoration: none;
+      padding: 16px 45px;
+      font-family: var(--fuente-titulo);
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      border-radius: 4px;
+      border: 2px solid var(--morado);
+      transition: all var(--transicion);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+      cursor: pointer;
+    }
+
+    .btn-principal:hover {
+      background: transparent;
+      color: var(--morado-claro);
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.8);
+      transform: translateY(-3px);
+    }
+
+    /* ==============================
+       SECCIÓN SERVICIOS
+    ============================== */
+    #servicios {
+      background-color: var(--gris-oscuro);
+    }
+
+    .grid-servicios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .tarjeta-servicio {
+      background: var(--gris-medio);
+      border-radius: 8px;
+      padding: 40px 30px;
+      text-align: center;
+      border: 1px solid #333;
+      transition: all var(--transicion);
+      cursor: default;
+    }
+
+    .tarjeta-servicio:hover {
+      border-color: var(--morado);
+      transform: translateY(-8px);
+      box-shadow: var(--sombra);
+    }
+
+    .tarjeta-servicio i {
+      font-size: 3rem;
+      color: var(--morado-claro);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .tarjeta-servicio h3 {
+      font-family: var(--fuente-titulo);
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+    }
+
+    .tarjeta-servicio p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* ==============================
+       SECCIÓN OPINIONES
+    ============================== */
+    #opiniones {
+      background-color: var(--negro);
+    }
+
+    .grid-opiniones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .tarjeta-opinion {
+      background: var(--gris-medio);
+      border-radius: 8px;
+      padding: 30px;
+      border-left: 4px solid var(--morado);
+      transition: transform var(--transicion);
+    }
+
+    .tarjeta-opinion:hover {
+      transform: translateY(-5px);
+    }
+
+    .estrellas {
+      color: var(--amarillo);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .tarjeta-opinion p {
+      color: #ccc;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .autor-opinion {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--morado);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fuente-titulo);
+      font-size: 1.2rem;
+      color: var(--blanco);
+      flex-shrink: 0;
+    }
+
+    .autor-info strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--blanco);
+    }
+
+    .autor-info span {
+      font-size: 0.8rem;
+      color: var(--gris-claro);
+    }
+
+    /* ==============================
+       SECCIÓN GALERÍA
+    ============================== */
+    #galeria {
+      background-color: var(--gris-oscuro);
+    }
+
+    .grid-galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+    }
+
+    .imagen-galeria {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      aspect-ratio: 4/3;
+    }
+
+    .imagen-galeria img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .imagen-galeria::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(124, 58, 237, 0.3);
+      opacity: 0;
+      transition: opacity var(--transicion);
+    }
+
+    .imagen-galeria:hover img {
+      transform: scale(1.08);
+    }
+
+    .imagen-galeria:hover::after {
+      opacity: 1;
+    }
+
+    /* ==============================
+       SECCIÓN PRE-REGISTRO
+    ============================== */
+    #pre-registro {
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 50%, #0f0f0f 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #pre-registro::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .pre-registro-intro {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 50px;
+      color: #bbb;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .pre-registro-intro strong {
+      color: var(--morado-claro);
+    }
+
+    .formulario-registro {
+      background: var(--gris-medio);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      border-radius: 12px;
+      padding: 50px 40px;
+      max-width: 750px;
+      margin: 0 auto;
+      box-shadow: 0 8px 40px rgba(124, 58, 237, 0.15);
+      position: relative;
+      z-index: 1;
+    }
+
+    .formulario-registro h3 {
+      font-family: var(--fuente-titulo);
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: var(--morado-claro);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .grid-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .campo-form {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .campo-form.ancho-completo {
+      grid-column: 1 / -1;
+    }
+
+    .campo-form label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--amarillo);
+    }
+
+    .campo-form input,
+    .campo-form select,
+    .campo-form textarea {
+      background: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: var(--blanco);
+      font-family: var(--fuente-texto);
+      font-size: 0.95rem;
+      padding: 12px 15px;
+      transition: border-color var(--transicion), box-shadow var(--transicion);
+      width: 100%;
+    }
+
+    .campo-form select option {
+      background: #1e1e1e;
+    }
+
+    .campo-form input::placeholder,
+    .campo-form textarea::placeholder {
+      color: #666;
+    }
+
+    .campo-form input:focus,
+    .campo-form select:focus,
+    .campo-form textarea:focus {
+      outline: none;
+      border-color: var(--morado);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    }
+
+    .campo-form textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .aviso-privacidad {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 6px;
+      padding: 14px;
+      margin-top: 5px;
+    }
+
+    .aviso-privacidad input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: var(--morado);
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .aviso-privacidad label {
+      font-size: 0.85rem;
+      color: #aaa;
+      cursor: pointer;
+      letter-spacing: 0;
+      text-transform: none;
+      font-weight: 400;
+    }
+
+    .aviso-privacidad label a {
+      color: var(--morado-claro);
+      text-decoration: underline;
+    }
+
+    .btn-registrar {
+      width: 100%;
+      margin-top: 25px;
+      font-size: 1.3rem;
+      padding: 16px;
+      border: none;
+      font-family: var(--fuente-titulo);
+      letter-spacing: 3px;
+    }
+
+    /* Mensaje de confirmación tras enviar */
+    .mensaje-exito {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .mensaje-exito i {
+      font-size: 4rem;
+      color: #22c55e;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .mensaje-exito h3 {
+      font-family: var(--fuente-titulo);
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--blanco);
+      margin-bottom: 10px;
+    }
+
+    .mensaje-exito p {
+      color: #aaa;
+      font-size: 1rem;
+    }
+
+    .mensaje-exito strong {
+      color: var(--morado-claro);
+    }
+
+    /* Badge "GRATIS" en la sección */
+    .badge-gratis {
+      display: inline-block;
+      background: var(--morado);
+      color: var(--blanco);
+      font-family: var(--fuente-titulo);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      vertical-align: middle;
+    }
+
+    /* ==============================
+       SECCIÓN CONTACTO
+    ============================== */
+    #contacto {
+      background-color: var(--negro);
+    }
+
+    .grid-contacto {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .info-contacto h3 {
+      font-family: var(--fuente-titulo);
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      color: var(--blanco);
+    }
+
+    .item-contacto {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .item-contacto i {
+      font-size: 1.3rem;
+      color: var(--morado-claro);
+      margin-top: 3px;
+      width: 22px;
+      flex-shrink: 0;
+    }
+
+    .item-contacto div strong {
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--amarillo);
+      margin-bottom: 4px;
+    }
+
+    .item-contacto div p {
+      color: #ccc;
+      font-size: 0.95rem;
+    }
+
+    .mapa-contenedor {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid rgba(124, 58, 237, 0.4);
+      box-shadow: var(--sombra);
+    }
+
+    .mapa-contenedor iframe {
+      width: 100%;
+      height: 380px;
+      display: block;
+      border: none;
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    footer {
+      background: var(--gris-oscuro);
+      border-top: 2px solid var(--morado);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .footer-contenido {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-family: var(--fuente-titulo);
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo span {
+      color: var(--morado-claro);
+    }
+
+    .redes-sociales {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .redes-sociales a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid #444;
+      color: #aaa;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all var(--transicion);
+    }
+
+    .redes-sociales a:hover {
+      background: var(--morado);
+      border-color: var(--morado);
+      color: var(--blanco);
+      transform: translateY(-4px);
+    }
+
+    .footer-texto {
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    /* ==============================
+       ANIMACIONES
+    ============================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animar {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .animar.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==============================
+       RESPONSIVE - MÓVIL
+    ============================== */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.98);
+        padding: 20px;
+        gap: 20px;
+        border-top: 1px solid #222;
+      }
+
+      .nav-links.activo {
+        display: flex;
+      }
+
+      .hero-contenido h1 {
+        font-size: 3.5rem;
+      }
+
+      .grid-contacto {
+        grid-template-columns: 1fr;
+      }
+
+      .seccion {
+        padding: 60px 20px;
+      }
+
+      .titulo-seccion {
+        font-size: 2.2rem;
+      }
+
+      .grid-form {
+        grid-template-columns: 1fr;
+      }
+
+      .campo-form.ancho-completo {
+        grid-column: 1;
+      }
+
+      .formulario-registro {
+        padding: 35px 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==============================
+       HEADER - Menú de navegación
+  ============================== -->
+  <header>
+    <nav>
+      <a href="#inicio" class="logo">GYM <span>KAREN</span></a>
+
+      <div class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#pre-registro">Pre-Registro</a></li>
+        <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- ==============================
+       SECCIÓN HERO (INICIO)
+  ============================== -->
+  <section id="inicio">
+    <div class="hero-contenido">
+      <p class="subtitulo">Blvd. Río Mayo 5613, León de los Aldama</p>
+      <h1>SIN <span>LÍMITES</span><br>SIN EXCUSAS</h1>
+      <p class="descripcion">
+        Tu mejor versión comienza aquí. Equipamiento de primer nivel,
+        entrenadores expertos y la energía que necesitas para superar tus metas.
+      </p>
+      <a href="#pre-registro" class="btn-principal">¡PRE-REGÍSTRATE GRATIS!</a>
+    </div>
+  </section>
+
+
+  <!-- ==============================
+       SECCIÓN SERVICIOS
+  ============================== -->
+  <section id="servicios" class="seccion">
+    <div class="contenedor">
+      <h2 class="titulo-seccion animar">NUESTROS SERVICIOS</h2>
+      <div class="linea-morada animar"></div>
+
+      <div class="grid-servicios">
+
+        <div class="tarjeta-servicio animar">
+          <i class="fas fa-dumbbell"></i>
+          <h3>Área de Pesas</h3>
+          <p>
+            Zona completa de pesos libres con mancuernas, barras olímpicas y
+            todo el equipo necesario para ganar masa muscular y fuerza.
+          </p>
+        </div>
+
+        <div class="tarjeta-servicio animar">
+          <i class="fas fa-cogs"></i>
+          <h3>Máquinas Modernas</h3>
+          <p>
+            Contamos con maquinaria de última generación para trabajar cada
+            grupo muscular de forma segura, eficiente y con resultados reales.
+          </p>
+        </div>
+
+        <div class="tarjeta-servicio animar">
+          <i class="fas fa-user-check"></i>
+          <h3>Entrenamiento Personal</h3>
+          <p>
+            Planes personalizados a tu medida con seguimiento constante de
+            nuestros entrenadores para maximizar tus resultados en menos tiempo.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==============================
+       SECCIÓN PRE-REGISTRO
+  ============================== -->
+  <section id="pre-registro" class="seccion">
+    <div class="contenedor">
+      <h2 class="titulo-seccion animar">
+        PRE-REGISTRO <span class="badge-gratis">GRATIS</span>
+      </h2>
+      <div class="linea-morada animar"></div>
+
+      <p class="pre-registro-intro animar">
+        Regístrate ahora y <strong>llega al gym directo a entrenar</strong>.<br>
+        Con tu pre-registro, solo necesitas presentarte y pagar tu membresía —
+        sin papeleos, sin esperas. ¡Todo listo en segundos!
+      </p>
+
+      <div class="formulario-registro animar">
+
+        <!-- Formulario principal -->
+        <div id="contenidoFormulario">
+          <h3><i class="fas fa-id-card" style="margin-right:10px;font-size:1.4rem;"></i>TUS DATOS PERSONALES</h3>
+
+          <form id="formPreRegistro" novalidate>
+            <div class="grid-form">
+
+              <!-- Nombre -->
+              <div class="campo-form">
+                <label for="nombre">Nombre(s) *</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ej. María" required />
+              </div>
+
+              <!-- Apellidos -->
+              <div class="campo-form">
+                <label for="apellidos">Apellidos *</label>
+                <input type="text" id="apellidos" name="apellidos" placeholder="Ej. García López" required />
+              </div>
+
+              <!-- Teléfono -->
+              <div class="campo-form">
+                <label for="telefono">Teléfono / WhatsApp *</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="Ej. 477 123 4567" required />
+              </div>
+
+              <!-- Email -->
+              <div class="campo-form">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Ej. maria@correo.com" />
+              </div>
+
+              <!-- Fecha de nacimiento -->
+              <div class="campo-form">
+                <label for="fechaNac">Fecha de nacimiento *</label>
+                <input type="date" id="fechaNac" name="fechaNac" required />
+              </div>
+
+              <!-- Género -->
+              <div class="campo-form">
+                <label for="genero">Género</label>
+                <select id="genero" name="genero">
+                  <option value="">-- Selecciona --</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="otro">Prefiero no decir</option>
+                </select>
+              </div>
+
+              <!-- Plan de interés -->
+              <div class="campo-form">
+                <label for="plan">Plan de interés *</label>
+                <select id="plan" name="plan" required>
+                  <option value="">-- Selecciona un plan --</option>
+                  <option value="diario">Día suelto</option>
+                  <option value="semanal">Semana (7 días)</option>
+                  <option value="quincenal">Quincena (15 días)</option>
+                  <option value="mensual">Mensualidad completa</option>
+                  <option value="trimestral">Trimestre (3 meses)</option>
+                </select>
+              </div>
+
+              <!-- Horario preferido -->
+              <div class="campo-form">
+                <label for="horario">Horario preferido</label>
+                <select id="horario" name="horario">
+                  <option value="">-- Selecciona --</option>
+                  <option value="manana">Mañana (6:00 – 12:00)</option>
+                  <option value="mediodia">Mediodía (12:00 – 16:00)</option>
+                  <option value="tarde">Tarde (16:00 – 22:00)</option>
+                </select>
+              </div>
+
+              <!-- Objetivo -->
+              <div class="campo-form ancho-completo">
+                <label for="objetivo">¿Cuál es tu objetivo principal?</label>
+                <select id="objetivo" name="objetivo">
+                  <option value="">-- Selecciona --</option>
+                  <option value="perder-peso">Perder peso</option>
+                  <option value="ganar-musculo">Ganar músculo</option>
+                  <option value="tonificar">Tonificar el cuerpo</option>
+                  <option value="resistencia">Mejorar resistencia</option>
+                  <option value="salud">Mantenerme saludable</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <!-- Comentarios adicionales -->
+              <div class="campo-form ancho-completo">
+                <label for="comentarios">¿Algo más que debamos saber? (lesiones, preguntas, etc.)</label>
+                <textarea id="comentarios" name="comentarios" placeholder="Opcional — escribe aquí cualquier información relevante..."></textarea>
+              </div>
+
+              <!-- Aviso de privacidad -->
+              <div class="campo-form ancho-completo">
+                <div class="aviso-privacidad">
+                  <input type="checkbox" id="privacidad" name="privacidad" required />
+                  <label for="privacidad">
+                    Acepto que mis datos sean utilizados únicamente para gestionar mi pre-registro en
+                    <strong>Gym Karen</strong> y recibir información sobre membresías y promociones.
+                    No se compartirán con terceros.
+                  </label>
+                </div>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn-principal btn-registrar">
+              <i class="fas fa-bolt" style="margin-right:8px;"></i>COMPLETAR PRE-REGISTRO
+            </button>
+          </form>
+        </div>
+
+        <!-- Mensaje de éxito (se muestra tras enviar) -->
+        <div class="mensaje-exito" id="mensajeExito">
+          <i class="fas fa-check-circle"></i>
+          <h3>¡PRE-REGISTRO EXITOSO!</h3>
+          <p>
+            <strong id="nombreConfirmacion"></strong>, tus datos han sido guardados.<br><br>
+            Cuando llegues al gym, solo dinos tu nombre y teléfono — <strong>¡ya tienes todo listo para pagar y entrenar!</strong><br><br>
+            Te esperamos en <strong>Blvd. Río Mayo 5613, León de los Aldama</strong>.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==============================
+       SECCIÓN OPINIONES
+  ============================== -->
+  <section id="opiniones" class="seccion">
+    <div class="contenedor">
+      <h2 class="titulo-seccion animar">LO QUE DICEN</h2>
+      <div class="linea-morada animar"></div>
+
+      <div class="grid-opiniones">
+
+        <div class="tarjeta-opinion animar">
+          <div class="estrellas">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p>"Las instalaciones están muy limpias y el ambiente es increíble.
+          La gente es amable y siempre hay buena vibra. Me siento muy cómodo
+          entrenando aquí desde el primer día."</p>
+          <div class="autor-opinion">
+            <div class="avatar">M</div>
+            <div class="autor-info">
+              <strong>Marco A.</strong>
+              <span>Miembro activo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta-opinion animar">
+          <div class="estrellas">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p>"Excelente precio por todo lo que ofrecen. Comparado con otros
+          gimnasios de la zona, la relación calidad-precio es muy buena.
+          Vale totalmente la pena la mensualidad."</p>
+          <div class="autor-opinion">
+            <div class="avatar">L</div>
+            <div class="autor-info">
+              <strong>Lupita R.</strong>
+              <span>Miembro desde 2023</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta-opinion animar">
+          <div class="estrellas">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+          </div>
+          <p>"El equipo está bien, pero algunos entrenadores no están muy
+          pendientes de los clientes. A veces tienes que buscarlos para
+          que te corrijan la técnica. Espero que mejore ese aspecto."</p>
+          <div class="autor-opinion">
+            <div class="avatar">J</div>
+            <div class="autor-info">
+              <strong>Javier T.</strong>
+              <span>Cliente frecuente</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta-opinion animar">
+          <div class="estrellas">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </div>
+          <p>"Me encanta el gym, pero en la tarde (5-8 pm) está muy lleno y
+          a veces hay que esperar las máquinas. Si puedes ir en la mañana,
+          ¡mucho mejor! La experiencia es completamente diferente."</p>
+          <div class="autor-opinion">
+            <div class="avatar">S</div>
+            <div class="autor-info">
+              <strong>Sandra P.</strong>
+              <span>Miembro activa</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta-opinion animar">
+          <div class="estrellas">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p>"¡Totalmente recomendado ir en la mañana! Desde las 6 am está
+          abierto y hay muchísimo espacio. Puedes entrar en calor, hacer
+          tu rutina completa y salir sin estrés. La mejor hora sin duda."</p>
+          <div class="autor-opinion">
+            <div class="avatar">C</div>
+            <div class="autor-info">
+              <strong>Carlos V.</strong>
+              <span>Asistente matutino</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==============================
+       SECCIÓN GALERÍA
+  ============================== -->
+  <section id="galeria" class="seccion">
+    <div class="contenedor">
+      <h2 class="titulo-seccion animar">GALERÍA</h2>
+      <div class="linea-morada animar"></div>
+
+      <div class="grid-galeria">
+
+        <div class="imagen-galeria animar">
+          <img
+            src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=600&q=75"
+            alt="Pesas y mancuernas del gimnasio"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="imagen-galeria animar">
+          <img
+            src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=600&q=75"
+            alt="Área de máquinas modernas"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="imagen-galeria animar">
+          <img
+            src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=600&q=75"
+            alt="Entrenamiento con pesas"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="imagen-galeria animar">
+          <img
+            src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600&q=75"
+            alt="Zona de entrenamiento personal"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="imagen-galeria animar">
+          <img
+            src="https://images.unsplash.com/photo-1534367990512-edbdca781b00?w=600&q=75"
+            alt="Cardio y máquinas"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="imagen-galeria animar">
+          <img
+            src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=75"
+            alt="Entrenamiento funcional"
+            loading="lazy"
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==============================
+       SECCIÓN CONTACTO
+  ============================== -->
+  <section id="contacto" class="seccion">
+    <div class="contenedor">
+      <h2 class="titulo-seccion animar">ENCUÉNTRANOS</h2>
+      <div class="linea-morada animar"></div>
+
+      <div class="grid-contacto">
+
+        <div class="info-contacto animar">
+          <h3>INFORMACIÓN</h3>
+
+          <div class="item-contacto">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Dirección</strong>
+              <p>Blvd. Río Mayo 5613<br>León de los Aldama, Guanajuato</p>
+            </div>
+          </div>
+
+          <div class="item-contacto">
+            <i class="fas fa-clock"></i>
+            <div>
+              <strong>Horario</strong>
+              <p>Lunes a Viernes: 6:00 am – 10:00 pm<br>Sábado y Domingo: 7:00 am – 8:00 pm</p>
+            </div>
+          </div>
+
+          <div class="item-contacto">
+            <i class="fas fa-phone"></i>
+            <div>
+              <strong>Teléfono</strong>
+              <p>+52 (477) 000-0000</p>
+            </div>
+          </div>
+
+          <div class="item-contacto">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Correo</strong>
+              <p>contacto@gymkaren.mx</p>
+            </div>
+          </div>
+
+          <a href="mailto:contacto@gymkaren.mx" class="btn-principal" style="margin-top:15px;font-size:1.1rem;padding:14px 35px;display:inline-block;text-decoration:none;">
+            CONTÁCTANOS
+          </a>
+        </div>
+
+        <div class="mapa-contenedor animar">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.9259840555393!2d-101.6741956!3d21.1219864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842bba43adcf24a7%3A0xa4e90c1e2c0e6421!2sBlvd.%20R%C3%ADo%20Mayo%205613%2C%20Le%C3%B3n%20de%20los%20Aldama%2C%20Gto.!5e0!3m2!1ses!2smx!4v1712605200000!5m2!1ses!2smx"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicación Gym Karen en León de los Aldama"
+          ></iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==============================
+       FOOTER
+  ============================== -->
+  <footer>
+    <div class="footer-contenido">
+
+      <div class="footer-logo">GYM <span>KAREN</span></div>
+
+      <div class="redes-sociales">
+        <a href="#" aria-label="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="#" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="#" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+
+      <p class="footer-texto">
+        &copy; 2025 Gym Karen — Blvd. Río Mayo 5613, León de los Aldama. Todos los derechos reservados.
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ==============================
+       JAVASCRIPT
+  ============================== -->
+  <script>
+    /* ---------- Menú hamburguesa ---------- */
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks   = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('activo');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('activo');
+      });
+    });
+
+    /* ---------- Animación al hacer scroll ---------- */
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach(entrada => {
+          if (entrada.isIntersecting) {
+            entrada.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll('.animar').forEach(el => {
+      observador.observe(el);
+    });
+
+    /* ---------- Formulario de Pre-Registro ---------- */
+    const form              = document.getElementById('formPreRegistro');
+    const contenido         = document.getElementById('contenidoFormulario');
+    const mensajeExito      = document.getElementById('mensajeExito');
+    const nombreConfirmacion = document.getElementById('nombreConfirmacion');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      /* Validaciones básicas */
+      const nombre    = document.getElementById('nombre').value.trim();
+      const apellidos = document.getElementById('apellidos').value.trim();
+      const telefono  = document.getElementById('telefono').value.trim();
+      const fechaNac  = document.getElementById('fechaNac').value;
+      const plan      = document.getElementById('plan').value;
+      const privacidad = document.getElementById('privacidad').checked;
+
+      if (!nombre || !apellidos || !telefono || !fechaNac || !plan) {
+        alert('Por favor completa todos los campos obligatorios marcados con *');
+        return;
+      }
+
+      if (!privacidad) {
+        alert('Debes aceptar el aviso de privacidad para continuar.');
+        return;
+      }
+
+      /* Guardar en localStorage como pre-registro (funciona sin servidor) */
+      const registro = {
+        nombre,
+        apellidos,
+        telefono,
+        email:      document.getElementById('email').value.trim(),
+        fechaNac,
+        genero:     document.getElementById('genero').value,
+        plan,
+        horario:    document.getElementById('horario').value,
+        objetivo:   document.getElementById('objetivo').value,
+        comentarios: document.getElementById('comentarios').value.trim(),
+        fechaRegistro: new Date().toLocaleString('es-MX')
+      };
+
+      /* Guardar lista acumulada de registros en localStorage */
+      const registros = JSON.parse(localStorage.getItem('gymKarenRegistros') || '[]');
+      registros.push(registro);
+      localStorage.setItem('gymKarenRegistros', JSON.stringify(registros));
+
+      /* Mostrar mensaje de éxito */
+      nombreConfirmacion.textContent = nombre + ' ' + apellidos;
+      contenido.style.display = 'none';
+      mensajeExito.style.display = 'block';
+
+      /* Hacer scroll suave al mensaje */
+      mensajeExito.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Petite Cafe | Cafetería en León Guanajuato | Café y Aperitivos</title>
+  <meta name="description" content="Disfruta café artesanal, frappés, aperitivos y un ambiente acogedor en Petite Cafe, ubicado en León Guanajuato. Calidad, sabor y excelente servicio."/>
+  <meta name="keywords" content="Petite Cafe León, cafetería en León Guanajuato, café artesanal León, frappés León, cafetería Paseos de la Pradera, cafetería cerca de mí"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cafe-dark:    #6F4E37;
+      --cafe-medium:  #8B5E3C;
+      --cafe-light:   #D4A373;
+      --cafe-pale:    #E8C99A;
+      --bg:           #FFF8F0;
+      --bg2:          #FFF2E3;
+      --text:         #333333;
+      --text-soft:    #7A6551;
+      --white:        #FFFDF9;
+      --cream:        #F5ECD7;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: .4;
+    }
+
+    /* ──────────────────── NAV ──────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 4%;
+      background: rgba(255,248,240,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(111,78,55,.12);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(111,78,55,.1); }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-style: italic;
+      color: var(--cafe-dark);
+      text-decoration: none;
+      letter-spacing: .04em;
+    }
+    .nav-logo span { color: var(--cafe-light); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--text-soft);
+      text-decoration: none; transition: color .2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1.5px; background: var(--cafe-light);
+      transform: scaleX(0); transition: transform .3s;
+    }
+    .nav-links a:hover { color: var(--cafe-dark); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-btn {
+      background: var(--cafe-dark); color: var(--white);
+      border: none; padding: .55rem 1.4rem;
+      font-family: 'DM Sans', sans-serif; font-size: .8rem;
+      font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      cursor: pointer; border-radius: 2px;
+      transition: background .2s, transform .15s;
+      text-decoration: none;
+    }
+    .nav-btn:hover { background: var(--cafe-medium); transform: translateY(-1px); }
+
+    .fb-nav-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--cream); border: 1px solid var(--cafe-pale);
+      transition: background .2s, transform .2s;
+    }
+    .fb-nav-icon:hover { background: #1877F2; border-color: #1877F2; transform: translateY(-1px); }
+    .fb-nav-icon:hover svg { fill: #fff; }
+    .fb-nav-icon svg { transition: fill .2s; }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      position: fixed; top: 65px; left: 0; right: 0; z-index: 99;
+      background: rgba(255,248,240,.98);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(111,78,55,.15);
+      max-height: 0; overflow: hidden;
+      transition: max-height .4s ease;
+      padding: 0 6%;
+      display: block;
+    }
+    .mobile-menu.open {
+      max-height: 500px;
+    }
+    .mobile-menu ul { list-style: none; display: flex; flex-direction: column; padding: 1rem 0 1.5rem; }
+    .mobile-menu a {
+      display: block; padding: .9rem 0;
+      font-size: 1.05rem; font-weight: 500; letter-spacing: .04em;
+      color: var(--text-soft); text-decoration: none;
+      border-bottom: 1px solid rgba(212,163,115,.2);
+      transition: color .2s, padding-left .2s;
+    }
+    .mobile-menu a:hover, .mobile-menu a:active { color: var(--cafe-dark); padding-left: .5rem; }
+    .mobile-menu li:last-child a { border-bottom: none; }
+    .mobile-menu-btn {
+      display: block !important;
+      margin-top: .8rem;
+      background: var(--cafe-dark) !important; color: var(--white) !important;
+      padding: .85rem 1.5rem !important; border-radius: 6px;
+      text-align: center; font-weight: 600 !important;
+      border-bottom: none !important;
+    }
+
+    /* Hamburger animation */
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--cafe-dark); transition: .3s;
+    }
+
+    /* ──────────────────── HERO ──────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 4%;
+      padding-top: 80px;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--cafe-pale) 0%, transparent 70%);
+    }
+    .hero-bg-circle.c1 { width: 600px; height: 600px; top: -100px; right: -150px; opacity: .5; }
+    .hero-bg-circle.c2 { width: 300px; height: 300px; bottom: 50px; left: -80px; opacity: .3; }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--cafe-light); font-weight: 500;
+      margin-bottom: 1.2rem;
+      animation: fadeUp .8s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--cafe-dark);
+      margin-bottom: 1.5rem;
+      animation: fadeUp .8s .1s ease both;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--cafe-medium);
+      display: block;
+    }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; line-height: 1.75;
+      color: var(--text-soft); font-weight: 300;
+      max-width: 480px; margin-bottom: 2.5rem;
+      animation: fadeUp .8s .2s ease both;
+    }
+
+    .hero-badges {
+      display: flex; gap: .75rem; flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      animation: fadeUp .8s .25s ease both;
+    }
+    .badge {
+      background: var(--cream); border: 1px solid var(--cafe-pale);
+      padding: .35rem .9rem; border-radius: 20px;
+      font-size: .75rem; color: var(--cafe-dark); font-weight: 500;
+      letter-spacing: .04em;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp .8s .3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--cafe-dark); color: var(--white);
+      padding: .85rem 2rem; border-radius: 3px;
+      font-size: .88rem; font-weight: 500; letter-spacing: .06em;
+      text-decoration: none; transition: all .2s;
+      border: 2px solid var(--cafe-dark);
+    }
+    .btn-primary:hover {
+      background: transparent; color: var(--cafe-dark);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: transparent; color: var(--cafe-dark);
+      padding: .85rem 2rem; border-radius: 3px;
+      font-size: .88rem; font-weight: 500; letter-spacing: .06em;
+      text-decoration: none; transition: all .2s;
+      border: 2px solid var(--cafe-pale);
+    }
+    .btn-secondary:hover {
+      border-color: var(--cafe-dark);
+      transform: translateY(-2px);
+    }
+
+    .hero-visual {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 1.5rem;
+      animation: fadeIn 1s .4s ease both;
+    }
+
+    .hero-card {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.25);
+      border-radius: 12px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 60px rgba(111,78,55,.1), 0 4px 12px rgba(111,78,55,.06);
+      width: 100%; max-width: 380px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: '☕';
+      font-size: 8rem; position: absolute;
+      top: -20px; right: -20px;
+      opacity: .06; pointer-events: none;
+    }
+    .hero-card-tag {
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--cafe-light); font-weight: 600; margin-bottom: .6rem;
+    }
+    .hero-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--cafe-dark); margin-bottom: .4rem;
+    }
+    .hero-card p {
+      font-size: .88rem; color: var(--text-soft); line-height: 1.6;
+    }
+
+    .hero-rating {
+      display: flex; align-items: center; gap: 1.5rem;
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 10px; padding: 1.2rem 1.8rem;
+      width: 100%; max-width: 380px;
+      box-shadow: 0 4px 20px rgba(111,78,55,.07);
+    }
+    .rating-stars { font-size: 1.3rem; letter-spacing: 2px; }
+    .rating-score {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700; color: var(--cafe-dark);
+    }
+    .rating-label { font-size: .78rem; color: var(--text-soft); margin-top: .1rem; }
+
+    /* ──────────────────── SECTION BASE ──────────────────── */
+    section { padding: 6rem 4%; }
+    .section-label {
+      font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--cafe-light); font-weight: 600; margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--cafe-dark); line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; color: var(--text-soft);
+      line-height: 1.7; font-weight: 300;
+      max-width: 560px;
+    }
+    .divider {
+      width: 48px; height: 2px;
+      background: linear-gradient(90deg, var(--cafe-light), transparent);
+      margin: 1.5rem 0;
+    }
+
+    /* ──────────────────── SOBRE NOSOTROS ──────────────────── */
+    .about { background: var(--bg2); }
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto;
+    }
+
+    .about-features {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.2rem; margin-top: 2.5rem;
+    }
+    .feat-item {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 8px; padding: 1.2rem;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .feat-item:hover {
+      box-shadow: 0 8px 24px rgba(111,78,55,.1);
+      transform: translateY(-2px);
+    }
+    .feat-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+    .feat-text { font-size: .85rem; color: var(--text-soft); font-weight: 400; line-height: 1.5; }
+
+    .about-quote {
+      position: relative;
+      background: var(--cafe-dark);
+      color: var(--white);
+      border-radius: 12px; padding: 3rem;
+      overflow: hidden;
+    }
+    .about-quote::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 14rem; line-height: 1;
+      position: absolute; top: -30px; left: 10px;
+      color: rgba(255,255,255,.05);
+      pointer-events: none;
+    }
+    .about-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; line-height: 1.6;
+      font-style: italic; color: var(--cafe-pale);
+      position: relative; z-index: 1;
+      margin-bottom: 1.5rem;
+    }
+    .about-quote-author {
+      font-size: .78rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--cafe-light); font-weight: 500;
+    }
+    .about-hours {
+      margin-top: 1.5rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px; padding: 1.2rem;
+    }
+    .about-hours h4 {
+      font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--cafe-pale); margin-bottom: .7rem;
+    }
+    .about-hours p { font-size: .88rem; color: rgba(255,255,255,.7); line-height: 1.7; }
+
+    /* ──────────────────── MENÚ ──────────────────── */
+    .menu { background: var(--bg); }
+    .menu-inner { max-width: 1200px; margin: 0 auto; }
+    .menu-header { text-align: center; margin-bottom: 3.5rem; }
+    .menu-header .section-sub { margin: 0 auto; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .menu-category {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 12px; overflow: hidden;
+      transition: box-shadow .3s, transform .3s;
+    }
+    .menu-category:hover {
+      box-shadow: 0 16px 48px rgba(111,78,55,.12);
+      transform: translateY(-4px);
+    }
+
+    .menu-cat-header {
+      background: linear-gradient(135deg, var(--cafe-dark), var(--cafe-medium));
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .menu-cat-icon { font-size: 1.8rem; }
+    .menu-cat-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--white);
+    }
+
+    .menu-items { padding: 1.5rem 2rem; }
+    .menu-item {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: .7rem 0;
+      border-bottom: 1px dashed rgba(212,163,115,.2);
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item-name {
+      font-size: .92rem; color: var(--text); font-weight: 400;
+    }
+    .menu-item-price {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem; color: var(--cafe-medium); font-weight: 600;
+      white-space: nowrap; margin-left: 1rem;
+    }
+
+    .menu-item-desc {
+      font-size: .78rem; color: var(--text-soft); line-height: 1.4;
+      margin-top: .15rem; font-style: italic;
+    }
+    .menu-item-inner { display: flex; flex-direction: column; flex: 1; }
+
+    .menu-note {
+      text-align: center; margin-top: 2.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; color: var(--text-soft); font-style: italic;
+    }
+
+    /* ──────────────────── POR QUÉ ──────────────────── */
+    .why { background: var(--bg2); }
+    .why-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto;
+    }
+
+    .why-cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .why-card {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 10px; padding: 1.8rem;
+      text-align: center;
+      transition: all .25s;
+      cursor: default;
+    }
+    .why-card:hover {
+      background: var(--cafe-dark); border-color: var(--cafe-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(111,78,55,.2);
+    }
+    .why-card:hover .why-card-title,
+    .why-card:hover .why-card-text { color: var(--white); }
+    .why-card:hover .why-card-icon-wrap { background: rgba(255,255,255,.1); }
+
+    .why-card-icon-wrap {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--cream); margin-bottom: 1rem;
+      font-size: 1.5rem;
+      transition: background .25s;
+    }
+    .why-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--cafe-dark); margin-bottom: .4rem;
+      transition: color .25s;
+    }
+    .why-card-text { font-size: .82rem; color: var(--text-soft); line-height: 1.5; transition: color .25s; }
+
+    /* ──────────────────── OPINIONES ──────────────────── */
+    .reviews { background: var(--bg); }
+    .reviews-header { text-align: center; margin-bottom: 3.5rem; }
+    .reviews-header .section-sub { margin: 0 auto; }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+    }
+
+    .review-card {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 10px; padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: box-shadow .3s, transform .3s;
+    }
+    .review-card:hover {
+      box-shadow: 0 12px 40px rgba(111,78,55,.1);
+      transform: translateY(-3px);
+    }
+    .review-card::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem; line-height: 1;
+      position: absolute; top: -10px; right: 15px;
+      color: var(--cafe-pale); opacity: .5;
+      pointer-events: none;
+    }
+    .review-stars { color: #F4A623; font-size: 1rem; margin-bottom: .8rem; letter-spacing: 2px; }
+    .review-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; line-height: 1.65;
+      color: var(--text); font-style: italic;
+      margin-bottom: 1.2rem;
+    }
+    .review-author {
+      font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--cafe-light); font-weight: 600;
+    }
+
+    .reviews-summary {
+      text-align: center; margin-top: 3rem;
+      padding: 2.5rem;
+      background: linear-gradient(135deg, var(--cafe-dark), var(--cafe-medium));
+      border-radius: 12px; max-width: 500px; margin: 3rem auto 0;
+    }
+    .reviews-summary-score {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem; color: var(--white); line-height: 1;
+      margin-bottom: .4rem;
+    }
+    .reviews-summary-stars { font-size: 1.6rem; letter-spacing: 3px; margin-bottom: .5rem; }
+    .reviews-summary-text { font-size: .82rem; color: var(--cafe-pale); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ──────────────────── DELIVERY ──────────────────── */
+    .delivery { background: var(--bg); }
+    .delivery-inner { max-width: 900px; margin: 0 auto; }
+    .delivery-header { text-align: center; margin-bottom: 3rem; }
+    .delivery-header .section-sub { margin: 0 auto; }
+
+    .delivery-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+    }
+
+    .delivery-card {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 14px;
+      padding: 2.2rem 2rem;
+      display: flex; flex-direction: column; gap: 1.4rem;
+      transition: box-shadow .3s, transform .3s;
+    }
+    .delivery-card:hover {
+      box-shadow: 0 16px 48px rgba(0,0,0,.1);
+      transform: translateY(-4px);
+    }
+
+    .delivery-card-logo { display: flex; align-items: center; }
+
+    .delivery-card-info { display: flex; flex-direction: column; gap: .7rem; }
+
+    .delivery-badge { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .d-badge {
+      font-size: .75rem; font-weight: 600; letter-spacing: .04em;
+      padding: .3rem .8rem; border-radius: 20px; border: 1px solid;
+    }
+    .d-badge.time {
+      background: var(--cream); color: var(--cafe-dark);
+      border-color: var(--cafe-pale);
+    }
+
+    .delivery-card-note {
+      font-size: .78rem; color: var(--text-soft); line-height: 1.5;
+      font-style: italic;
+    }
+
+    .delivery-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: .85rem 1.5rem;
+      border-radius: 8px;
+      font-size: .88rem; font-weight: 700; letter-spacing: .04em;
+      text-decoration: none; transition: all .2s;
+      margin-top: auto;
+    }
+    .rappi-btn {
+      background: #FF441A; color: #fff;
+    }
+    .rappi-btn:hover { background: #e03910; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,68,26,.3); }
+
+    .ubereats-btn {
+      background: #000; color: #fff;
+    }
+    .ubereats-btn:hover { background: #222; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+
+    @media (max-width: 600px) {
+      .delivery-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ──────────────────── CONTACTO / MAPA ──────────────────── */
+    .contact { background: var(--bg2); }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      gap: 4rem; align-items: start; max-width: 1200px; margin: 0 auto;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-block {
+      background: var(--white);
+      border: 1px solid rgba(212,163,115,.2);
+      border-radius: 10px; padding: 1.6rem;
+    }
+    .contact-block h4 {
+      font-size: .7rem; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--cafe-light); font-weight: 600; margin-bottom: .8rem;
+    }
+    .contact-block p, .contact-block a {
+      font-size: .92rem; color: var(--text-soft); line-height: 1.7;
+      text-decoration: none;
+    }
+    .contact-block a:hover { color: var(--cafe-dark); }
+    .contact-services { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .svc-tag {
+      font-size: .75rem; background: var(--cream);
+      border: 1px solid var(--cafe-pale);
+      color: var(--cafe-dark); padding: .3rem .8rem;
+      border-radius: 20px; font-weight: 500;
+    }
+
+    .map-wrap {
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 12px 40px rgba(111,78,55,.12);
+      border: 1px solid rgba(212,163,115,.2);
+    }
+    .map-wrap iframe { display: block; }
+
+    .cta-bar {
+      margin-top: 2.5rem;
+      background: var(--cafe-dark);
+      border-radius: 10px; padding: 1.8rem;
+      text-align: center;
+    }
+    .cta-bar p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; color: var(--cafe-pale); font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .cta-bar .btn-primary {
+      background: var(--cafe-light); border-color: var(--cafe-light);
+      color: var(--cafe-dark);
+    }
+    .cta-bar .btn-primary:hover { background: transparent; color: var(--cafe-pale); border-color: var(--cafe-pale); }
+
+    /* ──────────────────── FOOTER ──────────────────── */
+    footer {
+      background: #2C1810; color: rgba(255,255,255,.55);
+      padding: 3rem 4% 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-style: italic;
+      color: var(--cafe-pale); margin-bottom: .8rem;
+    }
+    .footer-logo span { color: var(--cafe-light); }
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-style: italic;
+      color: rgba(255,255,255,.35); margin-bottom: 1.5rem;
+    }
+    .footer-social { margin-bottom: 1.5rem; }
+    .footer-fb {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #1877F2; color: #fff;
+      padding: .55rem 1.4rem; border-radius: 20px;
+      font-size: .82rem; font-weight: 600; text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .footer-fb:hover { background: #0f5ecf; transform: translateY(-2px); }
+
+    .footer-links {
+      display: flex; gap: 1.8rem; justify-content: center; flex-wrap: wrap;
+      list-style: none; margin-bottom: 2rem;
+    }
+    .footer-links a {
+      font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.4); text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--cafe-light); }
+    .footer-copy { font-size: .75rem; color: rgba(255,255,255,.2); }
+
+    /* ──────────────────── WHATSAPP FLOTANTE ──────────────────── */
+    .whatsapp-float {
+      position: fixed; bottom: 28px; right: 24px; z-index: 200;
+      display: flex; align-items: center; gap: .6rem;
+      background: #25D366; color: #fff;
+      padding: .75rem 1.2rem .75rem 1rem;
+      border-radius: 50px;
+      box-shadow: 0 6px 24px rgba(37,211,102,.4);
+      text-decoration: none; font-weight: 600; font-size: .88rem;
+      transition: all .3s ease;
+      animation: waBounce 2s infinite;
+    }
+    .whatsapp-float:hover {
+      background: #20b858;
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 10px 32px rgba(37,211,102,.5);
+      animation: none;
+    }
+    .whatsapp-label { white-space: nowrap; }
+
+    @keyframes waBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 560px) {
+      .whatsapp-float { padding: .75rem; border-radius: 50%; }
+      .whatsapp-label { display: none; }
+    }
+
+    /* ──────────────────── ANIMATIONS ──────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ──────────────────── RESPONSIVE ──────────────────── */
+    @media (max-width: 900px) {
+      .nav-links, .nav-btn { display: none; }
+      .hamburger { display: flex; }
+
+      .hero, .about-inner, .why-inner, .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .hero { padding-top: 100px; }
+      .hero-visual { display: none; }
+
+      .why-cards { grid-template-columns: 1fr 1fr; }
+
+      .map-wrap { order: -1; }
+    }
+
+    @media (min-width: 901px) {
+      .mobile-menu { display: none !important; }
+    }
+
+    @media (max-width: 560px) {
+      section { padding: 4rem 5%; }
+      .why-cards { grid-template-columns: 1fr; }
+      .about-features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#inicio" class="nav-logo">Petite <span>Cafe</span></a>
+    <ul class="nav-links">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#opiniones">Opiniones</a></li>
+      <li><a href="#delivery">Delivery</a></li>
+      <li><a href="#contacto">Ubicación</a></li>
+    </ul>
+    <a href="#contacto" class="nav-btn">¿Cómo llegar?</a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="mobile-menu">
+    <ul>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#opiniones">Opiniones</a></li>
+      <li><a href="#delivery">Delivery</a></li>
+      <li><a href="#contacto">Ubicación</a></li>
+      <li><a href="#contacto" class="mobile-menu-btn">📍 ¿Cómo llegar?</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="hero-bg-circle c1"></div>
+    <div class="hero-bg-circle c2"></div>
+
+    <div>
+      <div class="hero-eyebrow">☕ León, Guanajuato · Paseos de la Pradera</div>
+      <h1>Petite<br><em>Cafe</em></h1>
+      <p class="hero-desc">Tu espacio ideal para disfrutar café de calidad, bebidas deliciosas y un ambiente acogedor. Sabores preparados con dedicación en un lugar pensado para ti.</p>
+      <div class="hero-badges">
+        <span class="badge">⭐ 4.9 / 5</span>
+        <span class="badge">☕ Café Artesanal</span>
+        <span class="badge">🥐 Aperitivos</span>
+        <span class="badge">💲 Precios Accesibles</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#menu" class="btn-primary">☕ Ver Menú</a>
+        <a href="#contacto" class="btn-secondary">📍 Cómo Llegar</a>
+
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-tag">Hoy disponible</div>
+        <h3>Café de especialidad & Frappés</h3>
+        <p>Americano · Latte · Capuchino · Cold Brew · Frappés desde $40 · Sándwich de pavo</p>
+      </div>
+      <div class="hero-rating">
+        <div>
+          <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+        </div>
+        <div>
+          <div class="rating-score">4.9</div>
+          <div class="rating-label">Basado en 31 opiniones</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros" class="about">
+    <div class="about-inner">
+      <div class="reveal">
+        <div class="section-label">Sobre Nosotros</div>
+        <h2 class="section-title">Bienvenidos a<br>Petite Cafe</h2>
+        <div class="divider"></div>
+        <p class="section-sub">En Petite Cafe creemos que una buena taza de café puede transformar cualquier momento del día. Somos una cafetería creada para ofrecer un ambiente cómodo, agradable y cercano.</p>
+        <div class="about-features">
+          <div class="feat-item">
+            <div class="feat-icon">🌿</div>
+            <div class="feat-text">Ingredientes de calidad seleccionados con cuidado</div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon">😊</div>
+            <div class="feat-text">Servicio amable y atención personalizada</div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon">💲</div>
+            <div class="feat-text">Precios accesibles para todos</div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon">🏡</div>
+            <div class="feat-text">Ambiente agradable y relajado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="about-quote">
+          <p>Ya sea para una salida en pareja, una reunión casual o un momento personal, Petite Cafe busca convertirse en tu lugar favorito.</p>
+          <div class="about-quote-author">Petite Cafe · León, Guanajuato</div>
+          <div class="about-hours">
+            <h4>🕔 Horario de Atención</h4>
+            <p>Lunes a Domingo: Abierto a partir de las 5:00 p.m.<br><em style="font-size:.82rem;opacity:.7">Algunos fines de semana mantenemos horario matutino.</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENÚ -->
+  <section id="menu" class="menu">
+    <div class="menu-inner">
+      <div class="menu-header reveal">
+        <div class="section-label">Nuestro Menú</div>
+        <h2 class="section-title">Sabores que enamoran</h2>
+        <div class="divider" style="margin:1.2rem auto;"></div>
+        <p class="section-sub">Cada bebida y aperitivo preparado con dedicación y amor para ofrecerte la mejor experiencia.</p>
+      </div>
+
+      <div class="menu-grid">
+
+        <!-- Cafés Calientes -->
+        <div class="menu-category reveal">
+          <div class="menu-cat-header">
+            <div class="menu-cat-icon">☕</div>
+            <div class="menu-cat-title">Cafés Calientes</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Espresso</span>
+                <span class="menu-item-desc">Shot de espresso 30 ml</span>
+              </div>
+              <span class="menu-item-price">$25</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Americano</span>
+                <span class="menu-item-desc">Café estilo americano con sabor a elegir</span>
+              </div>
+              <span class="menu-item-price">$32</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Capuchino</span>
+                <span class="menu-item-desc">Café con leche espumosa y sabor a elegir</span>
+              </div>
+              <span class="menu-item-price">$50</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Latte</span>
+                <span class="menu-item-desc">Café con leche y sabor a elegir</span>
+              </div>
+              <span class="menu-item-price">$50</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Mokachino</span>
+                <span class="menu-item-desc">Café con chocolate y leche espumosa</span>
+              </div>
+              <span class="menu-item-price">$50</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Tisana</span>
+                <span class="menu-item-desc">Té de frutos secos con sabor a elegir</span>
+              </div>
+              <span class="menu-item-price">$45</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bebidas Frías -->
+        <div class="menu-category reveal">
+          <div class="menu-cat-header">
+            <div class="menu-cat-icon">🧋</div>
+            <div class="menu-cat-title">Bebidas Frías</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Frappé</span>
+                <span class="menu-item-desc">Bebida frappé 16 oz a base de leche y hielo, sabor a elegir</span>
+              </div>
+              <span class="menu-item-price">$62</span>
+            </div>
+            <div class="menu-item">
+              <span class="menu-item-name" style="font-size:.78rem;color:var(--text-soft);font-style:italic;">Sabores: Capuchino · Moka · Chocolate · Matcha · Oreo · Taro · Chai</span>
+            </div>
+            <div class="menu-item" style="padding-top:1rem;">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Cold Brew</span>
+                <span class="menu-item-desc">Café frío de extracción lenta</span>
+              </div>
+              <span class="menu-item-price">$45</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Combos -->
+        <div class="menu-category reveal">
+          <div class="menu-cat-header">
+            <div class="menu-cat-icon">🤝</div>
+            <div class="menu-cat-title">Combos</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Sándwich y Latte</span>
+                <span class="menu-item-desc">Sándwich de jamón + latte con leche y sabor a elegir</span>
+              </div>
+              <span class="menu-item-price">$130</span>
+            </div>
+          </div>
+          <div style="padding:0 2rem 1.5rem;">
+            <div style="background:var(--cream);border-radius:6px;padding:.9rem;font-size:.8rem;color:var(--text-soft);line-height:1.5;">
+              🌟 El mejor valor del menú. Café + comida en un solo precio.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sándwiches y Croissants -->
+        <div class="menu-category reveal">
+          <div class="menu-cat-header">
+            <div class="menu-cat-icon">🥪</div>
+            <div class="menu-cat-title">Sándwiches & Croissants</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Sándwich</span>
+                <span class="menu-item-desc">Pan de caja con jitomate, espinaca, cebolla, proteína a elegir, queso manchego y aderezo</span>
+              </div>
+              <span class="menu-item-price">$68</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Croissant</span>
+                <span class="menu-item-desc">Con jitomate, espinaca, cebolla, queso manchego, proteína a elegir y aderezo</span>
+              </div>
+              <span class="menu-item-price">$68</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Croissant Nutella</span>
+                <span class="menu-item-desc">Relleno de Nutella y láminas de manzana con canela</span>
+              </div>
+              <span class="menu-item-price">$50</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panes Artesanales -->
+        <div class="menu-category reveal">
+          <div class="menu-cat-header">
+            <div class="menu-cat-icon">🍞</div>
+            <div class="menu-cat-title">Panes Artesanales</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Pan de Guayaba</span>
+                <span class="menu-item-desc">Pan artesanal dulce y suave con trozos de guayaba natural</span>
+              </div>
+              <span class="menu-item-price">$40</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Muffin de Plátano</span>
+                <span class="menu-item-desc">Esponjoso con sabor natural de plátano y chocolate semiamargo. 100% casero</span>
+              </div>
+              <span class="menu-item-price">$30</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Panqué de Naranja</span>
+                <span class="menu-item-desc">Suave y esponjoso con jugo y ralladura natural de naranja. 100% casero</span>
+              </div>
+              <span class="menu-item-price">$40</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-inner">
+                <span class="menu-item-name">Pan de Elote</span>
+                <span class="menu-item-desc">Suave, húmedo y con sabor auténtico de elote natural</span>
+              </div>
+              <span class="menu-item-price">$45</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="menu-note reveal">Menú sujeto a cambios según disponibilidad. Visítanos para descubrir nuestras especialidades del día. 🌿</p>
+    </div>
+  </section>
+
+  <!-- POR QUÉ ELEGIRNOS -->
+  <section id="porque" class="why">
+    <div class="why-inner">
+      <div class="reveal">
+        <div class="section-label">¿Por qué Petite Cafe?</div>
+        <h2 class="section-title">Una experiencia pensada para ti</h2>
+        <div class="divider"></div>
+        <p class="section-sub">Más que una cafetería, somos un espacio donde cada detalle importa. Desde la primera taza hasta el último aperitivo.</p>
+      </div>
+
+      <div class="why-cards reveal">
+        <div class="why-card">
+          <div class="why-card-icon-wrap">⭐</div>
+          <div class="why-card-title">Calificación 4.9 / 5</div>
+          <div class="why-card-text">Respaldados por la opinión de nuestros clientes</div>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon-wrap">💲</div>
+          <div class="why-card-title">Precios Accesibles</div>
+          <div class="why-card-text">De $1 a $100 MXN por persona</div>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon-wrap">🏠</div>
+          <div class="why-card-title">Ambiente Acogedor</div>
+          <div class="why-card-text">Cómodo y relajado para todos los momentos</div>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon-wrap">😊</div>
+          <div class="why-card-title">Atención Personalizada</div>
+          <div class="why-card-text">Servicio amable en cada visita</div>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon-wrap">☕</div>
+          <div class="why-card-title">Calidad en Cada Taza</div>
+          <div class="why-card-text">Ingredientes y preparación de nivel artesanal</div>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon-wrap">🚗</div>
+          <div class="why-card-title">Drive-Through</div>
+          <div class="why-card-text">Pedidos desde la comodidad de tu auto</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPINIONES -->
+  <section id="opiniones" class="reviews">
+    <div class="reviews-header reveal">
+      <div class="section-label">Opiniones</div>
+      <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+      <div class="divider" style="margin:1.2rem auto;"></div>
+      <p class="section-sub">La satisfacción de quienes nos visitan es nuestra mayor recompensa.</p>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Excelente servicio, bonito lugar, costos accesibles y muy rico todo.</p>
+        <div class="review-author">— Cliente satisfecho</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Muy rico café y el sándwich de pavo está delicioso. Definitivamente regreso.</p>
+        <div class="review-author">— Cliente satisfecho</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Los precios son accesibles y la comida deliciosa. Un lugar que vale la pena conocer.</p>
+        <div class="review-author">— Cliente satisfecho</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Super recomendado por la comida, el servicio y el ambiente. ¡No se arrepienten!</p>
+        <div class="review-author">— Cliente satisfecho</div>
+      </div>
+    </div>
+
+    <div class="reviews-summary reveal">
+      <div class="reviews-summary-stars">⭐⭐⭐⭐⭐</div>
+      <div class="reviews-summary-score">4.9</div>
+      <div class="reviews-summary-text">Basado en 31 opiniones · Google Maps</div>
+    </div>
+  </section>
+
+  <!-- PEDIR EN LÍNEA -->
+  <section id="delivery" class="delivery">
+    <div class="delivery-inner">
+      <div class="delivery-header reveal">
+        <div class="section-label">Pedir en Línea</div>
+        <h2 class="section-title">Tu café, donde estés</h2>
+        <div class="divider" style="margin:1.2rem auto;"></div>
+        <p class="section-sub">Pide desde la comodidad de tu casa a través de tus plataformas favoritas de entrega.</p>
+      </div>
+
+      <div class="delivery-cards" style="grid-template-columns:1fr;max-width:480px;margin:0 auto;">
+
+        <div class="delivery-card reveal">
+          <div class="delivery-card-logo ubereats-logo">
+            <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" height="28">
+              <text x="0" y="22" font-family="Arial Black, sans-serif" font-weight="900" font-size="22" fill="#06C167">Uber</text>
+              <text x="58" y="22" font-family="Arial Black, sans-serif" font-weight="900" font-size="22" fill="#000">Eats</text>
+            </svg>
+          </div>
+          <div class="delivery-card-info">
+            <div class="delivery-badge">
+              <span class="d-badge time">🕐 15 – 30 min</span>
+              <span class="d-badge platform" style="background:#E8FAF1;color:#06C167;border-color:#B3EDD4;">Uber Eats</span>
+            </div>
+            <p class="delivery-card-note">Es posible que se apliquen cargos por servicio según tu zona.</p>
+          </div>
+          <a href="https://www.ubereats.com/mx/store/petite-cafe-leon/izsB7yfjW_6Bb0-7HfrnQw?utm_campaign=CM2508147-search-free-nonbrand-google-pas_e_all_acq_Global&utm_medium=search-free-nonbrand&utm_source=google-pas&rwg_token=AFd1xnFuTGuP-8EE6Nzkt-AX1rmd80yYyOdoDmK3OkcTEKSj4DXKnnjyeqmH7kr7Ivr_iXfShMZpC_wXW88GTme17FeMWmmZsg%3D%3D"
+             target="_blank" rel="noopener"
+             class="delivery-btn ubereats-btn">
+            Pedir en Uber Eats →
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO / MAPA -->
+  <section id="contacto" class="contact">
+    <div class="contact-inner">
+      <div class="reveal">
+        <div class="section-label">Encuéntranos</div>
+        <h2 class="section-title">Visítanos en León</h2>
+        <div class="divider"></div>
+        <div class="contact-info">
+          <div class="contact-block">
+            <h4>📍 Dirección</h4>
+            <p>Blvrd Miguel de Cervantes Saavedra 7309 B<br>Paseos de la Pradera<br>37536 León de los Aldama, Guanajuato<br>México</p>
+          </div>
+          <div class="contact-block">
+            <h4>🕔 Horario</h4>
+            <p>Lunes a Domingo: 5:00 p.m. en adelante<br><em style="font-size:.82rem;">Algunos fines de semana: también horario matutino</em></p>
+          </div>
+          <div class="contact-block">
+            <h4>✅ Servicios disponibles</h4>
+            <div class="contact-services">
+              <span class="svc-tag">☕ Consumo en el lugar</span>
+              <span class="svc-tag">🚗 Drive-Through</span>
+            </div>
+          </div>
+          <div class="contact-block">
+            <h4>💲 Rango de Precios</h4>
+            <p>$1 – $100 MXN por persona</p>
+          </div>
+        </div>
+
+        <div class="cta-bar">
+          <p>"¿Listo para tu próxima taza favorita?"</p>
+          <a href="https://maps.google.com/?q=Blvrd+Miguel+de+Cervantes+Saavedra+7309+B+León+Guanajuato" target="_blank" class="btn-primary">📍 Abrir en Google Maps</a>
+        </div>
+      </div>
+
+      <div class="map-wrap reveal">
+        <!-- 
+          INSTRUCCIONES: Reemplaza la URL del iframe con tu embed de Google Maps.
+          Ve a Google Maps → Busca "Petite Cafe León" → Compartir → Insertar mapa → Copia el iframe.
+        -->
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.0!2d-101.6!3d21.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sPetite+Cafe+Leon+Guanajuato!5e0!3m2!1ses!2smx!4v1"
+          width="100%"
+          height="520"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de Petite Cafe en León Guanajuato">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHATSAPP FLOTANTE -->
+  <a href="https://wa.me/5213338896975" target="_blank" rel="noopener" class="whatsapp-float" title="Escríbenos por WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="whatsapp-label">¿Hablamos?</span>
+  </a>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Petite <span>Cafe</span></div>
+    <p class="footer-tagline">Café artesanal · León, Guanajuato</p>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/p/Petite-Caf%C3%A9-100091497346136/" target="_blank" rel="noopener" class="footer-fb" title="Facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+        </svg>
+        Síguenos en Facebook
+      </a>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#opiniones">Opiniones</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Petite Cafe · Blvrd Miguel de Cervantes Saavedra 7309 B, Paseos de la Pradera, León Gto. · Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    // NAV scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('active');
+    });
+    // Close menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('active');
+      });
+    });
+
+    // Intersection Observer for reveal animations
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Stagger menu cards
+    document.querySelectorAll('.menu-category').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.1) + 's';
+    });
+    document.querySelectorAll('.why-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.07) + 's';
+    });
+    document.querySelectorAll('.review-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.1) + 's';
+    });
+
+    // Smooth nav links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

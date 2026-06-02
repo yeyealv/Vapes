@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petite Café — Menú</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F7F2E8;
+    --espresso: #2C1810;
+    --espresso-mid: #4A2E1A;
+    --caramel: #C8884A;
+    --caramel-light: #E8C48A;
+    --sage: #7A8C6E;
+    --sage-light: #B5C4A8;
+    --warm-white: #FDFAF4;
+    --text-muted: #7A6A58;
+    --border: rgba(44,24,16,0.15);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Jost', sans-serif; background-color: var(--cream); color: var(--espresso); min-height: 100vh; overflow-x: hidden; }
+
+  /* ─── HERO ─────────────────────────────────────────── */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; overflow: hidden; padding: 2rem;
+  }
+  .hero-img {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1400&q=80&fit=crop') center/cover no-repeat;
+    animation: heroZoom 18s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.08); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(18,8,4,0.82) 0%, rgba(44,24,16,0.78) 60%, rgba(18,10,5,0.9) 100%);
+  }
+  .hero-content { position: relative; z-index: 2; }
+
+  /* staggered fade-up for hero children */
+  .hero-content > * { opacity: 0; transform: translateY(28px); animation: fadeUp 0.9s cubic-bezier(.22,1,.36,1) forwards; }
+  .eyebrow          { animation-delay: 0.2s; }
+  .hero h1          { animation-delay: 0.45s; }
+  .hero-sub         { animation-delay: 0.65s; }
+  .hero-divider     { animation-delay: 0.8s; }
+  .scroll-cta       { animation-delay: 1.0s; }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow { font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--caramel); margin-bottom: 1.5rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 700; color: var(--cream); line-height: 1; margin-bottom: 0.25rem; }
+  .hero h1 em { font-style: italic; color: var(--caramel-light); }
+  .hero-sub { font-weight: 300; font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(247,242,232,0.5); margin-top: 1rem; margin-bottom: 2.5rem; }
+  .hero-divider { width: 60px; height: 1px; background: var(--caramel); margin: 0 auto 2.5rem; position: relative; }
+  .hero-divider::before { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: var(--caramel); font-size: 0.6rem; background: var(--espresso); padding: 0 8px; }
+  .scroll-cta { display: inline-flex; align-items: center; gap: 10px; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--caramel); text-decoration: none; border: 1px solid rgba(200,136,74,0.35); padding: 0.75rem 2rem; transition: all 0.3s; }
+  .scroll-cta:hover { background: rgba(200,136,74,0.1); border-color: var(--caramel); }
+
+  /* pulsing arrow bounce */
+  .scroll-cta::after { content: '↓'; display: inline-block; animation: bounce 1.8s ease-in-out infinite; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(5px); }
+  }
+
+  /* ─── NAV ───────────────────────────────────────────── */
+  .menu-nav { position: sticky; top: 0; z-index: 100; background: var(--espresso); border-bottom: 1px solid rgba(200,136,74,0.25); padding: 0 2rem; }
+  .menu-nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 0; overflow-x: auto; scrollbar-width: none; }
+  .menu-nav-inner::-webkit-scrollbar { display: none; }
+  .nav-brand { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--caramel-light); white-space: nowrap; flex-shrink: 0; }
+  .nav-links { display: flex; gap: 0; list-style: none; flex-shrink: 0; }
+  .nav-links a { display: block; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,232,0.55); text-decoration: none; padding: 0.4rem 0.9rem; border-radius: 2px; transition: color 0.25s; white-space: nowrap; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0.9rem; right: 0.9rem; height: 1px; background: var(--caramel); transform: scaleX(0); transform-origin: left; transition: transform 0.3s cubic-bezier(.22,1,.36,1); }
+  .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+  .nav-links a:hover, .nav-links a.active { color: var(--caramel-light); }
+
+  /* ─── MAIN ──────────────────────────────────────────── */
+  .main { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+  .menu-section { padding: 5rem 0 2rem; }
+  .section-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem; }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-title-wrap { text-align: center; }
+  .section-icon { font-size: 1.2rem; color: var(--caramel); display: block; margin-bottom: 0.4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 500; color: var(--espresso); white-space: nowrap; }
+  .section-title em { font-style: italic; color: var(--caramel); }
+
+  /* Section header reveal */
+  .section-header { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .section-header.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── CARDS GRID ────────────────────────────────────── */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1rem; }
+
+  /* ─── CARD ──────────────────────────────────────────── */
+  .menu-card {
+    background: var(--warm-white);
+    border-radius: 6px; overflow: hidden;
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease;
+    /* scroll reveal */
+    opacity: 0; transform: translateY(36px);
+  }
+  .menu-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease; }
+  .menu-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(44,24,16,0.15); }
+
+  .card-img-wrap { width: 100%; height: 180px; overflow: hidden; position: relative; background: var(--border); flex-shrink: 0; }
+  .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(.22,1,.36,1); filter: brightness(0.97); }
+  .menu-card:hover .card-img-wrap img { transform: scale(1.07); filter: brightness(1.04); }
+
+  /* shimmer placeholder while image loads */
+  .card-img-wrap::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, #ede8de 25%, #f5f0e8 50%, #ede8de 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    z-index: 0;
+  }
+  .card-img-wrap img { position: relative; z-index: 1; }
+  .card-img-wrap img.loaded + .card-img-wrap::before,
+  .card-img-wrap.loaded::before { animation: none; opacity: 0; }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .card-body { padding: 1.2rem 1.25rem 1.4rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+  .card-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 500; color: var(--espresso); line-height: 1.3; }
+  .card-price {
+    font-size: 0.9rem; font-weight: 500; color: var(--caramel); white-space: nowrap;
+    background: rgba(200,136,74,0.1); border: 1px solid rgba(200,136,74,0.3);
+    border-radius: 3px; padding: 0.2rem 0.65rem; flex-shrink: 0;
+    transition: background 0.25s, color 0.25s;
+  }
+  .menu-card:hover .card-price { background: rgba(200,136,74,0.2); }
+  .card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; font-weight: 300; flex: 1; }
+  .card-tag { display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); border: 1px solid var(--sage-light); border-radius: 2px; padding: 0.15rem 0.5rem; align-self: flex-start; margin-top: auto; padding-top: 0.5rem; }
+
+  /* ─── FEATURED CARD ─────────────────────────────────── */
+  .menu-card.featured {
+    grid-column: 1 / -1; flex-direction: row; align-items: stretch; min-height: 220px;
+  }
+  .menu-card.featured .card-img-wrap { width: 280px; height: auto; flex-shrink: 0; }
+  .menu-card.featured .card-body { background: linear-gradient(110deg, #2C1810 0%, #4A2E1A 100%); }
+  .featured-badge { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.3rem; display: block; }
+  /* twinkle on the star */
+  .featured-badge { animation: twinkle 2.4s ease-in-out infinite; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+  }
+  .menu-card.featured .card-name { font-size: 1.35rem; color: var(--cream); }
+  .menu-card.featured .card-desc { color: rgba(247,242,232,0.6); }
+  .menu-card.featured .card-price { color: var(--caramel-light); border-color: rgba(200,136,74,0.4); background: rgba(200,136,74,0.12); font-size: 1rem; }
+
+  /* ─── FOOTER ────────────────────────────────────────── */
+  footer { background: var(--espresso); color: rgba(247,242,232,0.5); text-align: center; padding: 4rem 2rem; margin-top: 5rem; }
+  footer h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 2rem; color: var(--caramel-light); margin-bottom: 0.5rem; }
+  .footer-tagline { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,232,0.3); margin-bottom: 2rem; }
+  .footer-divider { width: 40px; height: 1px; background: rgba(200,136,74,0.4); margin: 1.5rem auto; }
+  .footer-hours { display: inline-flex; gap: 0.5rem; align-items: center; font-size: 0.75rem; background: rgba(200,136,74,0.12); border: 1px solid rgba(200,136,74,0.25); border-radius: 2px; padding: 0.5rem 1.2rem; color: var(--caramel-light); margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+  .footer-info { font-size: 0.8rem; line-height: 2; color: rgba(247,242,232,0.45); }
+  .rating-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 2rem; font-size: 0.75rem; color: rgba(247,242,232,0.35); }
+  .stars { color: var(--caramel); font-size: 0.85rem; letter-spacing: 0.1em; }
+  /* star fill animation on hover */
+  .rating-row:hover .stars { animation: starPop 0.4s ease; }
+  @keyframes starPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  /* ─── PAGE TRANSITION CURTAIN ───────────────────────── */
+  .curtain {
+    position: fixed; inset: 0; background: var(--espresso);
+    z-index: 9999; pointer-events: none;
+    animation: curtainLift 1.1s cubic-bezier(.77,0,.18,1) 0.1s forwards;
+  }
+  @keyframes curtainLift {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-100%); }
+  }
+
+  @media (max-width: 640px) {
+    .menu-card.featured { flex-direction: column; }
+    .menu-card.featured .card-img-wrap { width: 100%; height: 200px; }
+    .section-title { font-size: 1.2rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Page entrance curtain -->
+<div class="curtain" aria-hidden="true"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="eyebrow">Bienvenido a</p>
+    <h1><em>Petite</em> Café</h1>
+    <p class="hero-sub">León, Guanajuato · Paseos de la Pradera</p>
+    <div class="hero-divider"></div>
+    <a href="#menu" class="scroll-cta">Ver menú </a>
+  </div>
+</section>
+
+<!-- STICKY NAV -->
+<nav class="menu-nav">
+  <div class="menu-nav-inner">
+    <span class="nav-brand">Petite Café</span>
+    <ul class="nav-links">
+      <li><a href="#bebidas">Bebidas</a></li>
+      <li><a href="#frappes">Frappés</a></li>
+      <li><a href="#croissants">Croissants</a></li>
+      <li><a href="#panaderia">Panadería</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="main" id="menu">
+
+  <!-- BEBIDAS CALIENTES -->
+  <section class="menu-section" id="bebidas">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <div class="section-title-wrap">
+        <span class="section-icon">☕</span>
+        <h2 class="section-title">Bebidas <em>calientes</em></h2>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="cards-grid">
+      <div class="menu-card featured">
+        <div class="card-img-wrap">
+          <img src="https://media.istockphoto.com/id/1144950059/es/foto/s%C3%A1ndwich-fresco-y-forma-de-cisne-taza-de-caf%C3%A9-latte-arte-en-la-mesa-de-madera-delicioso.jpg?s=612x612&w=0&k=20&c=Lj9eGCgMe6qy_bxASrOg_1vovPnbHnfltREjUFX4ogw=" alt="Sándwich y Latte" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="featured-badge">✦ Especial del día</span>
+          <div class="card-top">
+            <p class="card-name">Sándwich y Latte</p>
+            <span class="card-price">$130</span>
+          </div>
+          <p class="card-desc">Sándwich de jamón artesanal acompañado de latte con leche y sabor a elegir. La combinación perfecta para comenzar el día.</p>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=600&q=80&fit=crop" alt="Espresso" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Espresso</p><span class="card-price">$25</span></div>
+          <p class="card-desc">Shot de espresso puro, 30 ml. Intensidad y carácter en cada sorbo.</p>
+          <span class="card-tag">30 ml</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkm55k1QH1d5YCTp_h8VoOvjO-JivBMhpZQQ&s" alt="Americano" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Americano</p><span class="card-price">$32</span></div>
+          <p class="card-desc">Café estilo americano con sabor a elegir. Suave y aromático.</p>
+          <span class="card-tag">sabor a elegir</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw42dcae51/images/recipe-Images/cafe-latte1-recipe_resized.jpg?sw=1200&sh=630" alt="Latte" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Latte</p><span class="card-price">$50</span></div>
+          <p class="card-desc">Café con leche vaporizada y sabor a elegir. Cremoso y equilibrado.</p>
+          <span class="card-tag">sabor a elegir</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRngCt8AXSKHsX_tBqhWw4d0oqDdmU29-9SKA&s" alt="Capuchino" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Capuchino</p><span class="card-price">$50</span></div>
+          <p class="card-desc">Café con leche espumosa y sabor a elegir. Clásico y reconfortante.</p>
+          <span class="card-tag">sabor a elegir</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTakEVVg_F4tYKQ-QkMx2Ux0JXy7IRuOPgUJg&s" alt="Mokachino" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Mokachino</p><span class="card-price">$50</span></div>
+          <p class="card-desc">Café con chocolate y leche espumosa. La combinación perfecta de café y cacao.</p>
+          <span class="card-tag">chocolate</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgFKgIw2SoZ1wbqNfjuhQwETLUTRnP_2i3xQ&s" alt="Tisana" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Tisana</p><span class="card-price">$45</span></div>
+          <p class="card-desc">Té de frutos secos con sabor a elegir. Una alternativa aromática y reconfortante.</p>
+          <span class="card-tag">sin cafeína</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRAPPÉS -->
+  <section class="menu-section" id="frappes">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <div class="section-title-wrap">
+        <span class="section-icon">🧊</span>
+        <h2 class="section-title"><em>Frappés</em></h2>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="cards-grid">
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP_eoVj2AH-RI10tEmKw2s3Aajnw6ryEn2cA&s" alt="Frappé capuchino" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Frappé Capuchino</p><span class="card-price">$62</span></div>
+          <p class="card-desc">Frappé de café espresso con leche y hielo. Clásico e intenso.</p>
+          <span class="card-tag">16 oz</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQZkm8RBqHJfFBK7zGaAjnKi6PDZL8GmaXDA&s" alt="Frappé moka" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Frappé Moka</p><span class="card-price">$62</span></div>
+          <p class="card-desc">Frappé de café con toque de chocolate. Rico y cremoso.</p>
+          <span class="card-tag">16 oz</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTtMHE351CZJLsINCYmkTVED-6I1O5J2hGzw&s" alt="Frappé chocolate" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Frappé Chocolate</p><span class="card-price">$62</span></div>
+          <p class="card-desc">Intenso sabor a chocolate, cremoso y refrescante.</p>
+          <span class="card-tag">16 oz</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaEP8bcSW4EhFsJwatYfERo9lzjRpCL_97-A&s" alt="Frappé Matcha" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Frappé Matcha</p><span class="card-price">$62</span></div>
+          <p class="card-desc">Frappé de té verde matcha con leche. Suave y floral.</p>
+          <span class="card-tag">16 oz</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://chefeel.com/chefgeneralfiles/2022/08/beverage-g591632fb0_1920.jpg" alt="Frappé Oreo" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Frappé Oreo</p><span class="card-price">$62</span></div>
+          <p class="card-desc">Frappé cremoso con galleta Oreo triturada. Dulce e irresistible.</p>
+          <span class="card-tag">16 oz</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIpDeFnwJGqMRtO4KBm09laf41QydxfF_x2g&s" alt="Frappé Taro" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Frappé Taro / Chai</p><span class="card-price">$62</span></div>
+          <p class="card-desc">Frappé de taro morado o especias chai. Exótico y aromático.</p>
+          <span class="card-tag">16 oz</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CROISSANTS & SÁNDWICHES -->
+  <section class="menu-section" id="croissants">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <div class="section-title-wrap">
+        <span class="section-icon">🥐</span>
+        <h2 class="section-title">Croissants <em>&amp; sándwiches</em></h2>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="cards-grid">
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80&fit=crop" alt="Croissant" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Croissant</p><span class="card-price">$68</span></div>
+          <p class="card-desc">Con jitomate, espinaca, cebolla, queso manchego, proteína a elegir y aderezo.</p>
+          <span class="card-tag">proteína a elegir</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIunBAW0Db5lOiz6yq1MRvPbA-2Z9xgzY4tA&s" alt="Croissant Nutella" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Croissant Nutella</p><span class="card-price">$50</span></div>
+          <p class="card-desc">Croissant relleno de Nutella y láminas de manzana con canela. Dulce e irresistible.</p>
+          <span class="card-tag">dulce</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&q=80&fit=crop" alt="Sándwich" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Sándwich</p><span class="card-price">$68</span></div>
+          <p class="card-desc">Pan de caja con jitomate, espinaca, cebolla, proteína a elegir, queso manchego y aderezo.</p>
+          <span class="card-tag">proteína a elegir</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANADERÍA -->
+  <section class="menu-section" id="panaderia">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <div class="section-title-wrap">
+        <span class="section-icon">🍞</span>
+        <h2 class="section-title">Panadería <em>artesanal</em></h2>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="cards-grid">
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://chefeel.com/chefgeneralfiles/2026/01/ChatGPT-Image-22-ene-2026-00_28_00.jpeg" alt="Pan de Guayaba" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Pan de Guayaba</p><span class="card-price">$40</span></div>
+          <p class="card-desc">Pan artesanal dulce y suave preparado con trozos de guayaba natural.</p>
+          <span class="card-tag">artesanal</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFSm8vdEfMXzyyCiqg2G8xpRRkDznNx06yig&s" alt="Muffin de Plátano" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Muffin de Plátano</p><span class="card-price">$30</span></div>
+          <p class="card-desc">Esponjoso, dulce y con el balance perfecto entre plátano y chocolate semiamargo. 100% casero.</p>
+          <span class="card-tag">100% casero</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_ywrZFhIZFZbS9Pizw3IfRp42iqsfL9hwyw&s" alt="Panqué de Naranja" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Panqué de Naranja</p><span class="card-price">$40</span></div>
+          <p class="card-desc">Suave, esponjoso con toque cítrico. Preparado con jugo y ralladura natural de naranja. 100% casero.</p>
+          <span class="card-tag">100% casero</span>
+        </div>
+      </div>
+      <div class="menu-card">
+        <div class="card-img-wrap">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsAln3Qcxs1lXESNQxOTUCxINxXTmiiSOoDQ&s" alt="Pan de Elote" loading="lazy">
+        </div>
+        <div class="card-body">
+          <div class="card-top"><p class="card-name">Pan de Elote</p><span class="card-price">$45</span></div>
+          <p class="card-desc">Suave, húmedo y con ese sabor auténtico de elote natural. Un clásico mexicano.</p>
+          <span class="card-tag">tradicional</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <h3>Petite Café</h3>
+  <p class="footer-tagline">café con alma en León</p>
+  <div class="footer-hours">⏰ &nbsp;Abre a las 5:00 p.m.</div>
+  <div class="footer-divider"></div>
+  <div class="footer-info">
+    <p>Blvrd Miguel de Cervantes Saavedra 7309 B</p>
+    <p>Paseos de la Pradera, 37536 León de los Aldama, Gto.</p>
+    <p style="margin-top:0.5rem">Consumo en el lugar · Para llevar · Domicilio</p>
+  </div>
+  <div class="rating-row">
+    <span class="stars">★★★★★</span>
+    <span>4.9 · 31 reseñas en Google Maps</span>
+  </div>
+</footer>
+
+<script>
+  /* ── Scroll-reveal: cards & section headers ── */
+  const revealItems = [
+    ...document.querySelectorAll('.menu-card'),
+    ...document.querySelectorAll('.section-header')
+  ];
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // stagger siblings inside same grid
+        const siblings = [...entry.target.parentElement.children];
+        const idx = siblings.indexOf(entry.target);
+        entry.target.style.transitionDelay = (idx * 80) + 'ms';
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  revealItems.forEach(el => revealObserver.observe(el));
+
+  /* ── Active nav highlight ── */
+  const sections = document.querySelectorAll('.menu-section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => navObserver.observe(s));
+
+  /* ── Shimmer cleanup when images finish loading ── */
+  document.querySelectorAll('.card-img-wrap img').forEach(img => {
+    const loaded = () => img.closest('.card-img-wrap').classList.add('loaded');
+    if (img.complete) loaded(); else img.addEventListener('load', loaded);
+  });
+</script>
+</body>
+</html>
