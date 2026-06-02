@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V4POS LEÓN — Catálogo Mayoreo Vapes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050505;
+  --surf:#0a0a0a;
+  --card:#0d0d0d;
+  --border:#1a1a1a;
+  --border2:#2d2d2d;
+  --text:#f0f0f0;
+  --muted:#5a5a5a;
+  --muted2:#2e2e2e;
+  --acc:#c8ff00;
+  --acc2:#ff2b55;
+  --acc3:#00e5ff;
+  --wapp:#25d366;
+  --gold:#ffbc00;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{position:fixed;width:10px;height:10px;background:var(--acc);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s;mix-blend-mode:difference}
+#cursor-trail{position:fixed;width:32px;height:32px;border:1px solid rgba(200,255,0,.35);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:left .12s ease,top .12s ease,width .2s,height .2s}
+body:not(.cursor-active) #cursor,body:not(.cursor-active) #cursor-trail{opacity:0}
+
+/* ── GRAIN ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.3;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+
+/* ── SCANLINES ── */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:10000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+  transition:opacity .6s ease, visibility .6s}
+#loader.gone{opacity:0;visibility:hidden}
+.load-logo{font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:10px;
+  color:var(--acc);animation:loadPulse 1s ease-in-out infinite}
+@keyframes loadPulse{0%,100%{opacity:1;text-shadow:0 0 40px rgba(200,255,0,.6)}50%{opacity:.4;text-shadow:none}}
+.load-bar{width:200px;height:1px;background:var(--border2);overflow:hidden}
+.load-fill{height:100%;background:var(--acc);animation:loadFill 1.4s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes loadFill{from{width:0}to{width:100%}}
+.load-txt{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:62px;
+  padding:0 48px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,5,5,.9);backdrop-filter:blur(20px) saturate(1.5);
+  border-bottom:1px solid var(--border);
+  transform:translateY(-62px);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+nav.in{transform:translateY(0)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:5px;
+  color:var(--acc);text-decoration:none;display:flex;align-items:center;gap:3px}
+.nav-logo span{color:rgba(240,240,240,.25)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.72rem;letter-spacing:3.5px;
+  text-transform:uppercase;transition:color .2s;font-family:'Space Mono',monospace}
+.nav-links a:hover{color:var(--acc)}
+.nav-cta{background:var(--acc);color:#000;font-family:'Space Mono',monospace;
+  font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;
+  padding:10px 22px;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;display:flex;align-items:center;gap:8px}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,255,0,.4)}
+.nav-cta svg{width:14px;height:14px;fill:#000}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s}
+
+/* ── HERO ── */
+.hero{min-height:100vh;padding:0 48px;position:relative;
+  display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.hero-mesh{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 70% 50%, rgba(200,255,0,.04) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 10% 80%, rgba(255,43,85,.04) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 85% 15%, rgba(0,229,255,.03) 0%, transparent 45%)}
+.hero-grid-lines{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%)}
+.hero-content{position:relative;z-index:2;max-width:900px}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:6px;
+  text-transform:uppercase;color:var(--acc);margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+  opacity:0;animation:slideUp .8s .2s cubic-bezier(.16,1,.3,1) both}
+.hero-eyebrow::before{content:'';display:block;width:40px;height:1px;background:var(--acc)}
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(5.5rem,14vw,13rem);
+  line-height:.85;letter-spacing:3px;
+  opacity:0;animation:slideUp .9s .35s cubic-bezier(.16,1,.3,1) both}
+.hero-h1 .line-acc{color:var(--acc);display:block;
+  text-shadow:0 0 120px rgba(200,255,0,.2),0 0 40px rgba(200,255,0,.1)}
+.hero-h1 .line-outline{-webkit-text-stroke:1px rgba(240,240,240,.12);color:transparent;display:block}
+.hero-sub{display:flex;align-items:flex-end;justify-content:space-between;
+  margin-top:48px;gap:40px;
+  opacity:0;animation:slideUp .8s .5s cubic-bezier(.16,1,.3,1) both}
+.hero-desc{max-width:400px}
+.hero-desc p{color:var(--muted);font-weight:400;line-height:1.8;font-size:.9rem}
+.hero-desc strong{color:var(--text);font-weight:600}
+.hero-actions{display:flex;gap:14px;flex-shrink:0}
+.btn-primary{background:var(--acc);color:#000;font-family:'Space Mono',monospace;
+  font-weight:700;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
+  padding:16px 36px;text-decoration:none;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s}
+.btn-primary::after{content:'';position:absolute;inset:0;background:#fff;
+  transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.btn-primary:hover::after{transform:translateX(0)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(200,255,0,.35)}
+.btn-primary span{position:relative;z-index:1}
+.btn-outline{border:1px solid var(--border2);color:var(--muted);
+  font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:2px;
+  text-transform:uppercase;padding:16px 28px;text-decoration:none;
+  transition:all .25s}
+.btn-outline:hover{border-color:var(--text);color:var(--text)}
+/* side stats */
+.hero-stats{position:absolute;right:48px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:32px;z-index:2;
+  opacity:0;animation:slideUp .8s .65s cubic-bezier(.16,1,.3,1) both}
+.hstat{border-left:2px solid var(--border2);padding-left:16px;transition:border-color .3s}
+.hstat:hover{border-color:var(--acc)}
+.hstat-n{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;color:var(--acc);line-height:1}
+.hstat-l{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);margin-top:2px}
+/* scroll hint */
+.scroll-hint{position:absolute;bottom:36px;left:48px;z-index:2;
+  display:flex;align-items:center;gap:14px;color:var(--muted);
+  font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:3px;
+  text-transform:uppercase;
+  opacity:0;animation:slideUp .6s .8s ease both}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--muted),transparent);
+  animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%,100%{transform:scaleY(1);transform-origin:top}50%{transform:scaleY(.5);transform-origin:top}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MARQUEE ── */
+.marquee{background:var(--acc);padding:14px 0;overflow:hidden;position:relative;z-index:3}
+.marquee-track{display:flex;gap:0;animation:marqueeScroll 24s linear infinite;width:max-content}
+.marquee-track:hover{animation-play-state:paused}
+.mitem{display:flex;align-items:center;gap:48px;padding:0 48px}
+.mitem span{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:5px;color:#000;white-space:nowrap}
+.mdot{color:rgba(0,0,0,.3);font-size:.5rem}
+@keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── BRANDS STRIP ── */
+.brands-strip{background:var(--surf);border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);overflow:hidden;padding:22px 0}
+.brands-track{display:flex;gap:0;animation:marqueeScroll 20s linear infinite;width:max-content}
+.brand-nm{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:7px;
+  color:var(--muted2);padding:0 52px;white-space:nowrap;
+  transition:color .3s;cursor:default}
+.brand-nm:hover{color:var(--acc)}
+
+/* ── SECTION COMMON ── */
+.section{max-width:1340px;margin:0 auto;padding:100px 48px}
+.s-label{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:6px;
+  text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.s-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,5.5rem);
+  line-height:.88;letter-spacing:1px}
+.s-title em{font-style:normal;color:var(--acc2)}
+
+/* ── FILTERS ── */
+.filter-wrap{margin:52px 0 48px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.filter-label{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);margin-right:14px}
+.fbtn{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:2px;
+  text-transform:uppercase;padding:9px 20px;background:transparent;
+  border:1px solid var(--border2);color:var(--muted);cursor:pointer;
+  transition:all .2s}
+.fbtn:hover{color:var(--text);border-color:var(--muted2)}
+.fbtn.active{background:var(--acc);color:#000;border-color:var(--acc);font-weight:700}
+/* search */
+.search-wrap{margin-left:auto;position:relative}
+.search-wrap input{background:transparent;border:1px solid var(--border2);color:var(--text);
+  font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:2px;
+  padding:9px 36px 9px 14px;outline:none;width:200px;transition:border-color .2s,width .3s}
+.search-wrap input::placeholder{color:var(--muted)}
+.search-wrap input:focus{border-color:var(--acc);width:260px}
+.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:.7rem;pointer-events:none}
+
+/* results count */
+#result-count{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:2px;
+  color:var(--muted);margin-bottom:32px}
+#result-count span{color:var(--acc)}
+
+/* ── PRODUCT GRID ── */
+#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+.no-results{grid-column:1/-1;padding:80px 0;text-align:center;
+  font-family:'Space Mono',monospace;font-size:.8rem;letter-spacing:3px;
+  color:var(--muted);text-transform:uppercase}
+
+/* ── PRODUCT CARD ── */
+.pcard{background:var(--card);border:1px solid var(--border);position:relative;
+  overflow:hidden;cursor:pointer;
+  opacity:0;transform:translateY(50px);
+  transition:opacity .6s ease, transform .6s cubic-bezier(.16,1,.3,1),
+    box-shadow .3s, border-color .25s}
+.pcard.vis{opacity:1;transform:translateY(0)}
+.pcard:hover{border-color:var(--border2);z-index:10;
+  box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 1px rgba(200,255,0,.06);
+  transform:translateY(-6px) !important}
+
+/* top accent */
+.card-accent{height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2),var(--acc3));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.pcard:hover .card-accent{transform:scaleX(1)}
+
+/* image area */
+.card-img{height:260px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0a0a0a 0%,#111 50%,#0a0a0a 100%);
+  display:flex;align-items:center;justify-content:center}
+.card-img img{width:100%;height:100%;object-fit:cover;
+  transition:transform .7s cubic-bezier(.16,1,.3,1),filter .4s;
+  filter:saturate(.9) brightness(.9)}
+.pcard:hover .card-img img{transform:scale(1.07);filter:saturate(1.1) brightness(1)}
+/* fallback svg illustration */
+.card-img-svg{height:220px;width:auto;
+  filter:drop-shadow(0 16px 32px rgba(0,0,0,.8));
+  transition:transform .6s cubic-bezier(.16,1,.3,1),filter .4s}
+.pcard:hover .card-img-svg{transform:scale(1.1) translateY(-5px) rotate(1deg);
+  filter:drop-shadow(0 28px 50px rgba(0,0,0,.6)) drop-shadow(0 0 20px rgba(200,255,0,.1))}
+.card-img-glow{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% 85%,rgba(200,255,0,.05) 0%,transparent 60%);
+  opacity:0;transition:opacity .4s}
+.pcard:hover .card-img-glow{opacity:1}
+/* badges */
+.badge-hits{position:absolute;top:14px;right:14px;z-index:2;
+  background:rgba(5,5,5,.9);border:1px solid var(--acc);
+  color:var(--acc);font-family:'Space Mono',monospace;font-size:.6rem;
+  letter-spacing:2px;text-transform:uppercase;padding:5px 11px;
+  backdrop-filter:blur(8px)}
+.badge-brand{position:absolute;top:14px;left:14px;z-index:2;
+  background:rgba(5,5,5,.85);color:var(--text);
+  font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;
+  padding:4px 10px;backdrop-filter:blur(6px)}
+.badge-new{position:absolute;bottom:14px;left:14px;z-index:2;
+  background:var(--acc2);color:#fff;
+  font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:2px;
+  padding:4px 9px;text-transform:uppercase}
+
+/* card body */
+.cbody{padding:24px 24px 16px}
+.c-name{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:1px;line-height:1}
+.c-sub{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:2px;
+  color:var(--muted);margin-top:4px;text-transform:uppercase}
+.c-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.ctag{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:1.5px;
+  text-transform:uppercase;padding:4px 10px;
+  background:rgba(255,255,255,.02);border:1px solid var(--border2);color:var(--muted)}
+
+/* prices */
+.cprices{display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--border);padding:18px 24px 14px;gap:4px}
+.price-block{}
+.price-lbl{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--muted2);margin-bottom:2px}
+.price-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1;color:var(--acc)}
+.price-val.red{color:var(--acc2)}
+.price-val.ask{font-size:1.1rem;font-family:'Space Mono',monospace;color:var(--muted);
+  display:flex;align-items:center;gap:6px}
+
+/* flavors */
+.cflavors{border-top:1px solid var(--border);padding:16px 24px 18px}
+.flabel{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted2);margin-bottom:10px}
+.fchips{display:flex;flex-wrap:wrap;gap:5px;
+  max-height:52px;overflow:hidden;
+  transition:max-height .5s cubic-bezier(.16,1,.3,1)}
+.pcard:hover .fchips,.fchips.open{max-height:200px}
+.fc{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:1px;
+  padding:3px 9px;background:rgba(0,229,255,.04);
+  border:1px solid rgba(0,229,255,.12);color:var(--acc3)}
+
+/* WhatsApp CTA */
+.card-cta{display:flex;text-decoration:none;width:100%;
+  border-top:1px solid var(--border);overflow:hidden;position:relative}
+.cta-wa{flex:1;padding:16px 20px;background:var(--surf);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  color:var(--muted);font-family:'Space Mono',monospace;
+  font-size:.6rem;letter-spacing:2px;text-transform:uppercase;
+  position:relative;overflow:hidden;transition:color .3s}
+.cta-wa::before{content:'';position:absolute;inset:0;background:var(--wapp);
+  transform:translateY(101%);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.cta-wa:hover{color:#fff}
+.cta-wa:hover::before{transform:translateY(0)}
+.cta-wa-inner{position:relative;z-index:1;display:flex;align-items:center;gap:9px}
+.cta-wa svg{width:16px;height:16px;fill:currentColor;flex-shrink:0}
+
+/* ── PROMO BAND ── */
+.promo{background:var(--acc);padding:64px 48px;
+  display:flex;align-items:center;justify-content:space-between;gap:32px}
+.promo-left h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);color:#000;line-height:.95}
+.promo-left p{color:rgba(0,0,0,.55);font-size:.88rem;margin-top:10px}
+.promo-right{display:flex;gap:16px;flex-wrap:wrap;flex-shrink:0}
+.btn-dark{background:#000;color:var(--acc);
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.72rem;
+  letter-spacing:2px;text-transform:uppercase;padding:18px 40px;text-decoration:none;
+  display:flex;align-items:center;gap:10px;
+  transition:transform .2s,box-shadow .2s}
+.btn-dark svg{width:18px;height:18px;fill:var(--acc)}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:60px}
+.feat{background:var(--card);border:1px solid var(--border);padding:36px 28px;
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1),border-color .3s}
+.feat.vis{opacity:1;transform:translateY(0)}
+.feat::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--acc);transform:scaleX(0);transform-origin:left;
+  transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.feat:hover::before{transform:scaleX(1)}
+.feat:hover{border-color:var(--border2)}
+.feat-icon{font-size:2rem;margin-bottom:20px}
+.feat-num{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--acc);
+  line-height:1;margin-bottom:4px}
+.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;
+  letter-spacing:1px;margin-bottom:8px}
+.feat-desc{color:var(--muted);font-size:.78rem;line-height:1.7;font-weight:400}
+
+/* ── FOOTER ── */
+footer{background:var(--surf);border-top:1px solid var(--border)}
+.footer-main{max-width:1340px;margin:0 auto;padding:60px 48px;
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:60px}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:5px;color:var(--acc);margin-bottom:12px}
+.footer-logo span{color:rgba(240,240,240,.25)}
+.footer-tagline{color:var(--muted);font-size:.8rem;line-height:1.7}
+.footer-heading{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:4px;
+  text-transform:uppercase;color:var(--acc);margin-bottom:18px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:.8rem;
+  transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--border);padding:24px 48px;
+  max-width:1340px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.footer-copy{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:2px;color:var(--muted)}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:30px;right:30px;z-index:800;
+  background:var(--wapp);display:flex;align-items:center;gap:12px;
+  padding:14px 20px 14px 16px;text-decoration:none;
+  box-shadow:0 10px 36px rgba(37,211,102,.4);
+  opacity:0;transform:translateY(16px) scale(.9);
+  transition:transform .2s,box-shadow .2s,opacity .4s}
+.wa-float.show{opacity:1;transform:translateY(0) scale(1)}
+.wa-float:hover{transform:scale(1.04) translateY(-2px);box-shadow:0 16px 48px rgba(37,211,102,.55)}
+.wa-float-pulse{animation:waPulse 3s 1s ease-in-out infinite}
+@keyframes waPulse{0%,100%{box-shadow:0 10px 36px rgba(37,211,102,.4)}
+  50%{box-shadow:0 10px 56px rgba(37,211,102,.7),0 0 0 12px rgba(37,211,102,.06)}}
+.wa-float svg{width:22px;height:22px;fill:#fff;flex-shrink:0}
+.wa-float-text{color:#fff}
+.wa-float-text strong{display:block;font-family:'Syne',sans-serif;
+  font-weight:700;font-size:.82rem;letter-spacing:.5px}
+.wa-float-text small{display:block;font-size:.62rem;opacity:.85;font-weight:400}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(32px);
+  transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:translateY(0)}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero{padding:80px 20px 60px;min-height:95vh}
+  .hero-stats{display:none}
+  .hero-sub{flex-direction:column;align-items:flex-start;gap:24px}
+  .scroll-hint{display:none}
+  .section{padding:70px 20px}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .promo{flex-direction:column;padding:44px 20px;text-align:center}
+  .footer-main{grid-template-columns:1fr;gap:40px;padding:44px 20px}
+  .footer-bottom{padding:20px;flex-direction:column;text-align:center}
+  #pgrid{grid-template-columns:1fr}
+  .wa-float{bottom:16px;right:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="load-logo">V4POS</div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+  <div class="load-txt">Cargando catálogo...</div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">V4POS<span>_LEON</span></a>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#cotizar">Cotizar</a></li>
+  </ul>
+  <a href="https://wa.me/524731203471?text=Hola%2C%20quiero%20cotizar%20vapes%20al%20mayoreo" target="_blank" class="nav-cta">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Mayoreo 5+ pzas
+  </a>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Distribución Mayoreo · León GTO</div>
+    <h1 class="hero-h1">
+      <span class="line-acc">VAPES</span>
+      <span>PREMIUM</span>
+      <span class="line-outline">MAYOREO</span>
+    </h1>
+    <div class="hero-sub">
+      <div class="hero-desc">
+        <p>Distribuidor oficial en <strong>León, Guanajuato</strong>. Las mejores marcas: <strong>WAKA, MASKKING, ELF BAR, BUGATTI</strong> y más. Mínimo <strong>5 piezas</strong>, precios directos, envíos a toda la república.</p>
+      </div>
+      <div class="hero-actions">
+        <a href="#productos" class="btn-primary"><span>Ver Catálogo</span></a>
+        <a href="https://wa.me/524731203471?text=Hola%2C%20quiero%20cotizar%20vapes%20al%20mayoreo" target="_blank" class="btn-outline">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-n" id="s1">0</div>
+      <div class="hstat-l">Marcas top</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n" id="s2">0</div><span style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--acc)">K</span>
+      <div class="hstat-l">Hits máximos</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n" id="s3">0</div><span style="font-family:'Bebas Neue';font-size:1.6rem;color:var(--acc)">+</span>
+      <div class="hstat-l">Sabores</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n">5</div>
+      <div class="hstat-l">Pzas mínimo</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+<!-- BRANDS -->
+<div class="brands-strip">
+  <div class="brands-track" id="btrack"></div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="productos">
+  <div class="s-label rv">Catálogo 2025</div>
+  <h2 class="s-title rv">NUESTROS <em>PRODUCTOS</em></h2>
+  <div class="filter-wrap rv">
+    <span class="filter-label">Filtrar:</span>
+    <button class="fbtn active" data-f="all">Todos</button>
+    <button class="fbtn" data-f="waka">WAKA</button>
+    <button class="fbtn" data-f="maskking">MASKKING</button>
+    <button class="fbtn" data-f="elfbar">ELF BAR</button>
+    <button class="fbtn" data-f="otros">Otros</button>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Buscar producto...">
+      <span class="search-icon">⌕</span>
+    </div>
+  </div>
+  <div id="result-count"></div>
+  <div id="pgrid"></div>
+</section>
+
+<!-- PROMO BAND -->
+<div class="promo rv" id="cotizar">
+  <div class="promo-left">
+    <h2>¿LISTO PARA<br>COTIZAR?</h2>
+    <p>Mayoreo desde 5 piezas · Precios directos · Envío a toda la República</p>
+  </div>
+  <div class="promo-right">
+    <a href="https://wa.me/524731203471?text=Hola%2C%20quiero%20cotizar%20vapes%20al%20mayoreo" target="_blank" class="btn-dark">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Cotizar por WhatsApp
+    </a>
+  </div>
+</div>
+
+<!-- NOSOTROS / FEATURES -->
+<section class="section" id="nosotros">
+  <div class="s-label rv">Por qué elegirnos</div>
+  <h2 class="s-title rv">VENTAJAS <em>V4POS</em></h2>
+  <div class="features-grid" id="feats"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div>
+      <div class="footer-logo">V4POS<span>_LEON</span></div>
+      <p class="footer-tagline">Distribuidor mayoreo de vapes en León, Guanajuato. Marcas premium, precios directos y envíos a toda la república.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Marcas</div>
+      <ul class="footer-links">
+        <li><a href="#">WAKA</a></li>
+        <li><a href="#">MASKKING</a></li>
+        <li><a href="#">ELF BAR</a></li>
+        <li><a href="#">BUGATTI</a></li>
+        <li><a href="#">IPLAY</a></li>
+        <li><a href="#">INSTABAR</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="https://wa.me/524731203471" target="_blank">WhatsApp Ventas</a></li>
+        <li><a href="#">León, Guanajuato</a></li>
+        <li><a href="#">Envíos nacionales</a></li>
+        <li><a href="#">Mínimo 5 piezas</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 V4POS LEÓN — Todos los derechos reservados</div>
+    <div class="footer-copy">Distribución mayoreo · León GTO</div>
+  </div>
+</footer>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/524731203471?text=Hola%2C%20quiero%20cotizar%20vapes%20al%20mayoreo" target="_blank" class="wa-float wa-float-pulse" id="wafloat">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <div class="wa-float-text">
+    <strong>Cotizar ahora</strong>
+    <small>Respuesta rápida</small>
+  </div>
+</a>
+
+<script>
+// ── WA NUMBER ──
+const WA = '524731203471';
+
+// ── PRODUCTS DATA ──
+const products = [
+  {
+    brand:'waka', label:'WAKA', name:'POCKET', model:'Pocket', hits:'5,000 HITS',
+    tags:['Recargable USB-C','Compacto','5K hits reales'],
+    unit:'$270',mayo:'$190',isAsk:false,
+    img:'https://cl.wakavaping.com/cdn/shop/files/WAKAPocket4000-CherryBomb.jpg?v=1755597618',
+    accent:'#c8ff00',
+    flavors:['Strawberry mint','Blueberry splash','Fresh mint','Coco Strawberry','Peach blue raspberry','Mango Watermelón','Cool mint','Watermelón mint','Blueberry mint','Strawberry Watermelón'],
+    isNew:true
+  },
+  {
+    brand:'waka', label:'WAKA', name:'SOPRO', model:'Sopro PA600', hits:'15,000 HITS',
+    tags:['Recargable','Dual mesh','Pantalla LED'],
+    unit:'$315',mayo:'$235',isAsk:false,
+    img:'https://mrvapes.mx/cdn/shop/files/PortadaBatonWEB-2024-07-12T170515.410_1.png?v=1720829273',
+    accent:'#00e5ff',
+    flavors:['Watermelón kiwi','Strawberry burst','Strawberry watermelón','Strawberry grape','Strawberry kiwi','Watermelón chill','Icy green grape','Fresh mint','Cool mint','Mojito mint','Peach mango watermelón','Black blue razz','Piña colada','Cherry berry'],
+    isNew:false
+  },
+  {
+    brand:'waka', label:'WAKA', name:'TITAN', model:'Titan 30K', hits:'30,000 HITS',
+    tags:['Tipo C','Pantalla LED','2 modos','Indicador batería'],
+    unit:'$355',mayo:'$285',isAsk:false,
+    img:'https://www.vapeandoando.com/cdn/shop/files/Waka-Titan-2.jpg?v=1729635448&width=416',
+    accent:'#ff2b55',
+    flavors:['Fresh mint','Peach blue raspberry ice','Sour blueberry raspberry ice','Strawberry kiwi ice','Strawberry mango ice','Juicy grape ice','Cherry soda','Watermelon ice','Banana berry','Guava raspberry'],
+    isNew:false
+  },
+  {
+    brand:'waka', label:'WAKA', name:'BLADE', model:'Blade 33K', hits:'33,000 HITS',
+    tags:['Dual mesh','700mAh','5% nicotina','USB tipo C'],
+    unit:'$360',mayo:'$290',isAsk:false,
+    img:'https://mrvapes.mx/cdn/shop/files/PortadaBatonWEB_65_ab7349dd-b83e-4e2d-b769-8931e0bce88d.png?v=1749661790',
+    accent:'#c8ff00',
+    flavors:['Cherry bomb-Up','Passion fruit','Grape mint','Lychee ice','Skittles','Peach blue raspberry','Miami mint','Watermelon chill','Cool mint','Watermelon mint','Fresh mint','Peach ice','Cherry Watermelon','Kiwi dragón fruit'],
+    isNew:false
+  },
+  {
+    brand:'waka', label:'WAKA', name:'BURST', model:'Burst 36K', hits:'36,000 HITS',
+    tags:['Tanque dual 19+8ml','Pantalla LED','ICE blast','Modo Smooth'],
+    unit:'$375',mayo:'$300',isAsk:false,
+    img:'https://mrvapes.mx/cdn/shop/files/PortadaBatonWEB_32.png?v=1741998314&width=1646',
+    accent:'#ffbc00',
+    flavors:['Pink lemonade','Blue razz ice','Strawberry Watermelon','Kiwi strawberry','Blueberry Watermelon','Strawberry ice','Grape ice','Miami mint','Cherry bomb','Danonino','Forest berries'],
+    isNew:true
+  },
+  {
+    brand:'maskking', label:'MASKKING', name:'FLAVOR X', model:'Flavor X Pro', hits:'Alta capacidad',
+    tags:['Pantalla TFT','Modo Boost','Modo Normal','Recargable'],
+    unit:'Consultar',mayo:'Consultar',isAsk:true,
+    img:'https://tse4.mm.bing.net/th/id/OIP.2GhGXu25t6i8UapehwGY3QHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
+    accent:'#ff2b55',
+    flavors:['Consulta sabores disponibles','Gran variedad frutas','Menta y hielo'],
+    isNew:false
+  },
+  {
+    brand:'elfbar', label:'ELF BAR', name:'BC5000', model:'BC 5000', hits:'5,000 HITS',
+    tags:['Diseño ergonómico','Alta capacidad','Múltiples sabores'],
+    unit:'Consultar',mayo:'Consultar',isAsk:true,
+    img:'https://tse4.mm.bing.net/th/id/OIP.zoB3oCCcSUfHCA6OSQhxAgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
+    accent:'#00e5ff',
+    flavors:['Blue razz ice','Peach mango','Watermelon','Strawberry mango','Tropical rainbow blast'],
+    isNew:false
+  },
+  {
+    brand:'otros', label:'IPLAY', name:'PRO MAX', model:'Pro Max', hits:'Alta capacidad',
+    tags:['Diseño compacto','Recargable','Transparente'],
+    unit:'Consultar',mayo:'Consultar',isAsk:true,
+    img:'https://mrvapes.mx/cdn/shop/files/PortadaBatonWEB_122.png?v=1744002329',
+    accent:'#c8ff00',
+    flavors:['Coco Strawberry','Blueberry mint','Peach mango','Consulta disponibilidad'],
+    isNew:false
+  },
+  {
+    brand:'otros', label:'BUGATTI', name:'LUXURY', model:'Luxury Edition', hits:'Consultar',
+    tags:['Diseño exclusivo','Edición especial','Premium'],
+    unit:'Consultar',mayo:'Consultar',isAsk:true,
+    img:'https://mrvapes.mx/cdn/shop/files/PortadaBatonWEB-2023-11-29T225713.654.png?v=1717602893',
+    accent:'#ffbc00',
+    flavors:['Consulta modelos y sabores'],
+    isNew:true
+  },
+
+];
+
+const waIcon = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+// ── RENDER ──
+function render(filter='all', search=''){
+  const g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  const sq = search.toLowerCase().trim();
+  let list = products.filter(p => {
+    const matchBrand = filter === 'all' || p.brand === filter;
+    const matchSearch = !sq ||
+      p.name.toLowerCase().includes(sq) ||
+      p.label.toLowerCase().includes(sq) ||
+      p.tags.some(t => t.toLowerCase().includes(sq)) ||
+      p.flavors.some(f => f.toLowerCase().includes(sq));
+    return matchBrand && matchSearch;
+  });
+
+  const cnt = document.getElementById('result-count');
+  cnt.innerHTML = `Mostrando <span>${list.length}</span> producto${list.length!==1?'s':''}`;
+
+  if(!list.length){
+    g.innerHTML = `<div class="no-results">Sin resultados · Prueba otro filtro</div>`;
+    return;
+  }
+
+  list.forEach((p, i) => {
+    const msg = encodeURIComponent(`Hola! Quiero cotizar al mayoreo:\n*${p.label} ${p.name}* (${p.hits})\n¿Precio y disponibilidad?`);
+    const c = document.createElement('div');
+    c.className = 'pcard';
+    c.style.transitionDelay = `${(i % 5) * 70}ms`;
+    c.innerHTML = `
+      <div class="card-accent"></div>
+      <div class="card-img">
+        <img src="${p.img}&auto=format&fit=crop" alt="${p.label} ${p.name}" loading="lazy"
+          onerror="this.style.display='none'">
+        <div class="card-img-glow"></div>
+        <div class="badge-hits">${p.hits}</div>
+        <div class="badge-brand">${p.label}</div>
+        ${p.isNew ? '<div class="badge-new">Nuevo</div>' : ''}
+      </div>
+      <div class="cbody">
+        <div class="c-name">${p.name}</div>
+        <div class="c-sub">${p.model}</div>
+        <div class="c-tags">${p.tags.map(t=>`<span class="ctag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="cprices">
+        <div class="price-block">
+          <div class="price-lbl">Precio unitario</div>
+          <div class="price-val${p.isAsk?' ask':''}">${p.unit}${!p.isAsk?' MXN':''}</div>
+        </div>
+        <div class="price-block">
+          <div class="price-lbl">Mayoreo 5+ pzas</div>
+          <div class="price-val${p.isAsk?' ask':' red'}">${p.mayo}${!p.isAsk?' MXN':''}</div>
+        </div>
+      </div>
+      <div class="cflavors">
+        <div class="flabel">Sabores disponibles</div>
+        <div class="fchips">${p.flavors.map(f=>`<span class="fc">${f}</span>`).join('')}</div>
+      </div>
+      <a href="https://wa.me/${WA}?text=${msg}" class="card-cta" target="_blank">
+        <div class="cta-wa">
+          <div class="cta-wa-inner">${waIcon}<span>Cotizar por WhatsApp</span></div>
+        </div>
+      </a>`;
+    g.appendChild(c);
+  });
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.pcard').forEach((c, i) => setTimeout(() => c.classList.add('vis'), i * 65));
+  });
+}
+
+// ── FILTER LOGIC ──
+let activeFilter = 'all';
+let searchVal = '';
+document.getElementById('frow') && document.getElementById('frow').addEventListener('click', e => {
+  const b = e.target.closest('.fbtn'); if(!b) return;
+  document.querySelectorAll('.fbtn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  activeFilter = b.dataset.f;
+  render(activeFilter, searchVal);
+});
+// using event delegation on document for filter buttons
+document.addEventListener('click', e => {
+  const b = e.target.closest('.fbtn'); if(!b) return;
+  document.querySelectorAll('.fbtn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  activeFilter = b.dataset.f;
+  render(activeFilter, searchVal);
+});
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchVal = e.target.value;
+  render(activeFilter, searchVal);
+});
+
+// ── MARQUEE ──
+const mItems = ['MAYOREO DESDE 5 PIEZAS','✦ WAKA · MASKKING · ELFBAR · BUGATTI ✦','PRECIOS DIRECTOS','✦ ENVÍOS A TODA LA REPÚBLICA ✦','HASTA 36,000 HITS','✦ RECARGABLES · DUAL MESH · LED ✦'];
+const mt = document.getElementById('mtrack');
+[...mItems,...mItems].forEach(s => {
+  const d = document.createElement('div'); d.className = 'mitem';
+  d.innerHTML = `<span>${s}</span><span class="mdot">◆</span>`;
+  mt.appendChild(d);
+});
+
+// ── BRANDS ──
+const brands = ['WAKA','MASKKING','IPLAY','ELF BAR','INSTABAR','BUGATTI','ELUX','FLUM'];
+const bt = document.getElementById('btrack');
+[...brands,...brands,...brands,...brands].forEach(b => {
+  const d = document.createElement('div'); d.className = 'brand-nm'; d.textContent = b; bt.appendChild(d);
+  const sep = document.createElement('div');
+  sep.style.cssText = 'padding:0 10px;font-family:"Bebas Neue",sans-serif;font-size:1rem;color:#1e1e1e;align-self:center';
+  sep.textContent = '◆'; bt.appendChild(sep);
+});
+
+// ── FEATURES ──
+const feats = [
+  {icon:'🏆',num:'8',label:'Marcas',title:'Top Marcas',desc:'Las mejores marcas del mercado: WAKA, MASKKING, ELF BAR, BUGATTI y más en un solo lugar.'},
+  {icon:'💰',num:'5',label:'Pzas mínimo',title:'Mayoreo Real',desc:'Precios de mayoreo desde 5 piezas. Sin cantidades absurdas. Directo al precio de distribuidor.'},
+  {icon:'🚀',num:'48',label:'Horas',title:'Envío Express',desc:'Envíos a toda la república en 24–48 horas. Empaque seguro, tracking incluido.'},
+  {icon:'💬',num:'24',label:'/ 7',title:'Soporte WhatsApp',desc:'Atención personalizada por WhatsApp. Cotizaciones inmediatas, asesoría y seguimiento de pedidos.'},
+];
+const fg = document.getElementById('feats');
+feats.forEach((f, i) => {
+  const d = document.createElement('div'); d.className = 'feat';
+  d.style.transitionDelay = `${i * 80}ms`;
+  d.innerHTML = `<div class="feat-icon">${f.icon}</div>
+    <div class="feat-num">${f.num}</div>
+    <div class="feat-title">${f.title}</div>
+    <div class="feat-desc">${f.desc}</div>`;
+  fg.appendChild(d);
+});
+
+// ── SCROLL REVEAL ──
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); revealObs.unobserve(e.target); }});
+}, {threshold: .1});
+document.querySelectorAll('.rv').forEach(el => revealObs.observe(el));
+
+const cardObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, {threshold: .06, rootMargin:'0px 0px -20px 0px'});
+
+const featObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, {threshold: .1});
+document.querySelectorAll('.feat').forEach(el => featObs.observe(el));
+
+// ── COUNTERS ──
+function animCount(el, target, duration=1200){
+  let start=0, step=target/60;
+  const iv = setInterval(()=>{
+    start+=step; if(start>=target){start=target;clearInterval(iv);}
+    el.textContent = Math.round(start);
+  }, duration/60);
+}
+
+// ── LOADER + INIT ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('gone');
+    document.getElementById('nav').classList.add('in');
+    document.body.classList.add('cursor-active');
+    setTimeout(() => {
+      render();
+      document.querySelectorAll('.pcard').forEach(c => cardObs.observe(c));
+      animCount(document.getElementById('s1'), 8);
+      animCount(document.getElementById('s2'), 36);
+      animCount(document.getElementById('s3'), 50);
+    }, 100);
+    setTimeout(() => {
+      document.getElementById('wafloat').classList.add('show');
+    }, 1500);
+  }, 1600);
+});
+
+// ── CUSTOM CURSOR ──
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  trail.style.left = e.clientX + 'px';
+  trail.style.top = e.clientY + 'px';
+});
+document.addEventListener('mousedown', () => {
+  cursor.style.width = '18px'; cursor.style.height = '18px';
+});
+document.addEventListener('mouseup', () => {
+  cursor.style.width = '10px'; cursor.style.height = '10px';
+});
+// enlarge on hoverable elements
+document.querySelectorAll('a,button,.pcard,.fbtn').forEach(el => {
+  el.addEventListener('mouseenter', () => { trail.style.width = '56px'; trail.style.height = '56px'; });
+  el.addEventListener('mouseleave', () => { trail.style.width = '32px'; trail.style.height = '32px'; });
+});
+
+// ── PARALLAX HERO MESH ──
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - .5) * 20;
+  const y = (e.clientY / window.innerHeight - .5) * 12;
+  document.querySelector('.hero-mesh').style.transform = `translate(${x}px,${y}px)`;
+});
+</script>
+</body>
+</html>
