@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda del Doctor — Dr. Alejandro Vega</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --navy:       #0A0E1A;
+  --navy-mid:   #1A2035;
+  --navy-light: #2D3A5C;
+  --gold:       #C9A84C;
+  --gold-light: #E0C270;
+  --gold-dim:   rgba(201,168,76,0.14);
+  --pearl:      #E8E8E8;
+  --pearl-dim:  #A0A8B8;
+  --white:      #FFFFFF;
+  --danger:     #C94C4C;
+  --danger-dim: rgba(201,76,76,0.14);
+  --success:    #4CAF82;
+  --success-dim:rgba(76,175,130,0.14);
+  --warn:       #E0A030;
+  --warn-dim:   rgba(224,160,48,0.14);
+  --fd: 'Playfair Display', serif;
+  --fb: 'Inter', sans-serif;
+  --tr: 0.25s cubic-bezier(.4,0,.2,1);
+  --r:  8px;
+  --rl: 16px;
+  --sh: 0 8px 40px rgba(0,0,0,.45);
+  --sg: 0 4px 20px rgba(201,168,76,.22);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--navy);color:var(--pearl);line-height:1.6;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:var(--fb);border:none;outline:none}
+input,select,textarea{font-family:var(--fb);outline:none}
+ul{list-style:none}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--navy-light);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+/* ========== LOGIN SCREEN ========== */
+#login-screen{
+  position:fixed;inset:0;
+  background:radial-gradient(ellipse at 60% 40%, rgba(45,58,92,.5) 0%, transparent 60%),
+             linear-gradient(135deg,var(--navy) 0%,#0D1528 100%);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+}
+.login-card{
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.22);
+  border-radius:var(--rl);
+  padding:52px 44px;
+  width:380px;
+  text-align:center;
+  box-shadow:var(--sh);
+  animation:fadeUp .5s both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.login-logo{
+  width:64px;height:64px;
+  background:var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;
+  font-size:28px;
+  color:var(--navy);
+}
+.login-card h1{font-family:var(--fd);font-size:1.7rem;color:var(--white);margin-bottom:6px}
+.login-card p{font-size:13px;color:var(--pearl-dim);margin-bottom:32px}
+.login-field{
+  display:flex;flex-direction:column;gap:7px;
+  text-align:left;margin-bottom:14px;
+}
+.login-field label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--pearl-dim)}
+.login-field input{
+  background:var(--navy);
+  border:1px solid rgba(201,168,76,.18);
+  border-radius:var(--r);
+  padding:12px 16px;
+  color:var(--white);
+  font-size:14px;
+  transition:var(--tr);
+  width:100%;
+}
+.login-field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.btn-login{
+  width:100%;padding:14px;
+  background:var(--gold);color:var(--navy);
+  font-size:15px;font-weight:700;
+  border-radius:var(--r);
+  margin-top:8px;
+  transition:var(--tr);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-login:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:var(--sg)}
+.login-hint{font-size:11.5px;color:var(--pearl-dim);margin-top:18px;opacity:.7}
+.login-hint strong{color:var(--gold)}
+.login-error{
+  background:var(--danger-dim);border:1px solid rgba(201,76,76,.3);
+  border-radius:var(--r);padding:10px 14px;
+  font-size:13px;color:var(--danger);
+  margin-bottom:14px;display:none;
+}
+
+/* ========== APP SHELL ========== */
+#app{display:none;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;top:0;left:0;bottom:0;
+  width:260px;
+  background:var(--navy-mid);
+  border-right:1px solid rgba(201,168,76,.12);
+  display:flex;flex-direction:column;
+  z-index:100;
+  transition:var(--tr);
+}
+.sidebar-logo{
+  padding:28px 24px 20px;
+  border-bottom:1px solid rgba(201,168,76,.1);
+}
+.sidebar-logo-row{display:flex;align-items:center;gap:10px}
+.sidebar-icon{
+  width:38px;height:38px;
+  background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--navy);font-size:17px;flex-shrink:0;
+}
+.sidebar-name{font-family:var(--fd);font-size:15px;color:var(--white);line-height:1.2}
+.sidebar-name span{display:block;font-family:var(--fb);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase}
+.nav-section{padding:20px 14px 8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pearl-dim)}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;margin:2px 8px;
+  border-radius:var(--r);
+  font-size:13.5px;font-weight:500;
+  color:var(--pearl-dim);
+  cursor:pointer;transition:var(--tr);
+}
+.nav-item i{width:18px;text-align:center;font-size:15px}
+.nav-item:hover{background:var(--gold-dim);color:var(--white)}
+.nav-item.active{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
+.sidebar-footer{
+  margin-top:auto;padding:20px 16px;
+  border-top:1px solid rgba(201,168,76,.1);
+}
+.doctor-info{display:flex;align-items:center;gap:10px}
+.doctor-avatar{
+  width:40px;height:40px;
+  background:var(--navy-light);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:16px;
+  color:var(--gold);
+}
+.doctor-name-small{font-size:13px;font-weight:600;color:var(--white)}
+.doctor-role-small{font-size:11px;color:var(--pearl-dim)}
+.btn-logout{
+  margin-top:14px;width:100%;
+  padding:10px;
+  border:1px solid rgba(201,76,76,.3);
+  border-radius:var(--r);
+  background:none;color:var(--danger);
+  font-size:13px;font-weight:500;
+  transition:var(--tr);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-logout:hover{background:var(--danger-dim)}
+
+/* MAIN */
+.main{margin-left:260px;min-height:100vh}
+.topbar{
+  position:sticky;top:0;
+  background:rgba(10,14,26,.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(201,168,76,.1);
+  padding:16px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:50;
+}
+.topbar-title{font-family:var(--fd);font-size:1.3rem;color:var(--white)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-date{font-size:13px;color:var(--pearl-dim)}
+.badge-dot{
+  position:relative;
+  display:inline-flex;
+}
+.badge-dot .dot{
+  position:absolute;top:-3px;right:-3px;
+  width:9px;height:9px;
+  background:var(--danger);border-radius:50%;
+  border:2px solid var(--navy);
+  animation:pulseDot 2s infinite;
+}
+@keyframes pulseDot{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.3)}
+}
+.content{padding:32px}
+
+/* ========== STAT CARDS ========== */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.12);
+  border-radius:var(--rl);
+  padding:22px 20px;
+  display:flex;align-items:center;gap:16px;
+  transition:var(--tr);
+}
+.stat-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-2px)}
+.stat-icon{
+  width:48px;height:48px;
+  border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.stat-icon.gold{background:var(--gold-dim);color:var(--gold)}
+.stat-icon.green{background:var(--success-dim);color:var(--success)}
+.stat-icon.red{background:var(--danger-dim);color:var(--danger)}
+.stat-icon.blue{background:rgba(70,120,220,.14);color:#6090F0}
+.stat-num{font-family:var(--fd);font-size:28px;color:var(--white);line-height:1}
+.stat-label{font-size:12px;color:var(--pearl-dim);margin-top:4px}
+
+/* ========== FILTER BAR ========== */
+.filter-bar{
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;margin-bottom:24px;
+}
+.filter-btn{
+  padding:8px 16px;border-radius:20px;
+  font-size:12.5px;font-weight:600;
+  border:1.5px solid rgba(201,168,76,.2);
+  background:none;color:var(--pearl-dim);
+  transition:var(--tr);letter-spacing:.3px;
+}
+.filter-btn:hover{border-color:var(--gold);color:var(--gold)}
+.filter-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.search-wrap{
+  flex:1;max-width:280px;
+  position:relative;
+}
+.search-wrap i{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--pearl-dim);font-size:14px;pointer-events:none;
+}
+.search-wrap input{
+  width:100%;
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:20px;
+  padding:8px 14px 8px 36px;
+  color:var(--white);font-size:13px;
+  transition:var(--tr);
+}
+.search-wrap input:focus{border-color:var(--gold)}
+.date-filter{
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:var(--r);
+  padding:8px 14px;
+  color:var(--white);font-size:13px;
+  appearance:none;
+  transition:var(--tr);
+}
+.date-filter:focus{border-color:var(--gold)}
+.ml-auto{margin-left:auto}
+.btn-sm{
+  padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:600;
+  display:inline-flex;align-items:center;gap:7px;transition:var(--tr);
+}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:var(--sg)}
+.btn-outline{border:1.5px solid var(--gold);color:var(--gold);background:none}
+.btn-outline:hover{background:var(--gold-dim)}
+.btn-green{background:var(--success-dim);color:var(--success);border:1px solid rgba(76,175,130,.3)}
+.btn-green:hover{background:rgba(76,175,130,.25)}
+.btn-red{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(201,76,76,.3)}
+.btn-red:hover{background:rgba(201,76,76,.25)}
+.btn-wa{background:rgba(37,211,102,.12);color:#25D366;border:1px solid rgba(37,211,102,.3)}
+.btn-wa:hover{background:rgba(37,211,102,.22)}
+
+/* ========== VIEW TABS ========== */
+.view-tabs{display:flex;gap:4px;background:var(--navy-mid);border-radius:var(--r);padding:4px;margin-left:auto}
+.view-tab{
+  padding:6px 14px;border-radius:6px;
+  font-size:12px;font-weight:600;
+  background:none;color:var(--pearl-dim);
+  transition:var(--tr);
+}
+.view-tab.active{background:var(--gold-dim);color:var(--gold)}
+.view-tab:hover{color:var(--white)}
+
+/* ========== CALENDAR VIEW ========== */
+#view-calendar{display:none}
+.cal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.cal-nav{display:flex;align-items:center;gap:16px}
+.cal-title{font-family:var(--fd);font-size:1.3rem;color:var(--white)}
+.cal-nav-btn{
+  width:34px;height:34px;
+  border-radius:50%;background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.2);
+  color:var(--pearl-dim);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:var(--tr);
+}
+.cal-nav-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+.cal-day-name{
+  text-align:center;padding:8px 4px;
+  font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--pearl-dim);
+}
+.cal-cell{
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.08);
+  border-radius:var(--r);
+  min-height:100px;
+  padding:8px;
+  cursor:pointer;
+  transition:var(--tr);
+  position:relative;
+}
+.cal-cell:hover{border-color:rgba(201,168,76,.3);background:rgba(45,58,92,.4)}
+.cal-cell.today{border-color:var(--gold);background:var(--gold-dim)}
+.cal-cell.other-month{opacity:.35}
+.cal-cell.has-appts{border-color:rgba(76,175,130,.3)}
+.cal-day-num{
+  font-size:13px;font-weight:600;color:var(--pearl-dim);
+  margin-bottom:6px;
+}
+.cal-cell.today .cal-day-num{
+  background:var(--gold);color:var(--navy);
+  width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;
+}
+.cal-appt-pill{
+  background:var(--success-dim);border:1px solid rgba(76,175,130,.25);
+  color:var(--success);
+  font-size:10px;font-weight:600;
+  padding:2px 6px;border-radius:4px;
+  margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cal-appt-pill.pending{background:var(--warn-dim);border-color:rgba(224,160,48,.25);color:var(--warn)}
+.cal-appt-pill.cancelled{background:var(--danger-dim);border-color:rgba(201,76,76,.25);color:var(--danger);text-decoration:line-through}
+.cal-more{font-size:10px;color:var(--pearl-dim);margin-top:2px}
+.cal-empty{opacity:0;pointer-events:none}
+
+/* ========== LIST VIEW ========== */
+#view-list{display:block}
+.appt-card{
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.1);
+  border-radius:var(--rl);
+  margin-bottom:12px;
+  overflow:hidden;
+  transition:var(--tr);
+  animation:slideIn .3s both;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.appt-card:hover{border-color:rgba(201,168,76,.28);box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.appt-card-main{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;gap:20px;
+  padding:18px 22px;
+  cursor:pointer;
+}
+.appt-date-block{
+  text-align:center;
+  background:var(--navy);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:var(--r);
+  padding:10px 16px;
+  min-width:70px;flex-shrink:0;
+}
+.appt-date-day{font-family:var(--fd);font-size:28px;color:var(--gold);line-height:1}
+.appt-date-mon{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--pearl-dim)}
+.appt-date-year{font-size:10px;color:var(--pearl-dim)}
+.appt-info{}
+.appt-name{font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.appt-meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--pearl-dim)}
+.appt-meta span{display:flex;align-items:center;gap:5px}
+.appt-meta i{color:var(--gold);font-size:12px}
+.appt-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 12px;border-radius:20px;
+  font-size:11px;font-weight:700;
+  letter-spacing:.8px;text-transform:uppercase;
+}
+.sb-pending{background:var(--warn-dim);color:var(--warn);border:1px solid rgba(224,160,48,.25)}
+.sb-confirmed{background:var(--success-dim);color:var(--success);border:1px solid rgba(76,175,130,.25)}
+.sb-cancelled{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(201,76,76,.25)}
+.sb-rescheduled{background:rgba(100,100,220,.14);color:#8080FF;border:1px solid rgba(100,100,220,.25)}
+.appt-card-expand{
+  padding:0 22px 18px;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:none;
+}
+.appt-card.open .appt-card-expand{display:block}
+.expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:16px;margin-bottom:16px}
+.expand-item label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--pearl-dim);display:block;margin-bottom:4px}
+.expand-item span{font-size:14px;color:var(--white)}
+.expand-notes{
+  background:var(--navy);border:1px solid rgba(201,168,76,.1);
+  border-radius:var(--r);padding:12px 16px;
+  font-size:13.5px;color:var(--pearl-dim);font-style:italic;
+  margin-bottom:16px;
+}
+.expand-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ========== REMINDERS PANEL ========== */
+.reminder-timeline{display:flex;flex-direction:column;gap:12px}
+.reminder-item{
+  display:flex;align-items:center;gap:16px;
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.1);
+  border-radius:var(--r);padding:14px 18px;
+  transition:var(--tr);
+}
+.reminder-item:hover{border-color:rgba(201,168,76,.25)}
+.reminder-time{
+  background:var(--gold-dim);border:1px solid rgba(201,168,76,.25);
+  border-radius:var(--r);
+  padding:6px 12px;font-size:12px;font-weight:700;
+  color:var(--gold);white-space:nowrap;flex-shrink:0;min-width:80px;text-align:center;
+}
+.reminder-time.sent{background:var(--success-dim);border-color:rgba(76,175,130,.25);color:var(--success)}
+.reminder-time.overdue{background:var(--danger-dim);border-color:rgba(201,76,76,.25);color:var(--danger)}
+.reminder-info{flex:1}
+.reminder-name{font-size:14px;font-weight:600;color:var(--white);margin-bottom:2px}
+.reminder-detail{font-size:12.5px;color:var(--pearl-dim)}
+.reminder-send{flex-shrink:0}
+
+/* ========== MODAL ========== */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(4px);
+  z-index:9000;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.22);
+  border-radius:var(--rl);
+  padding:36px 32px;
+  max-width:540px;width:100%;
+  box-shadow:var(--sh);
+  animation:fadeUp .3s both;
+  max-height:90vh;overflow-y:auto;
+}
+.modal h3{font-family:var(--fd);font-size:1.4rem;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.modal h3 i{color:var(--gold)}
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.form-group label{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--pearl-dim)}
+.form-group input,.form-group select,.form-group textarea{
+  background:var(--navy);border:1px solid rgba(201,168,76,.15);
+  border-radius:var(--r);padding:11px 14px;
+  color:var(--white);font-size:14px;transition:var(--tr);width:100%;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.09)}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;appearance:none}
+.form-group select option{background:var(--navy-mid)}
+.form-group textarea{min-height:80px;resize:vertical}
+.form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-footer{display:flex;gap:10px;margin-top:20px}
+.modal-footer button{flex:1;padding:12px;border-radius:var(--r);font-size:14px;font-weight:600;transition:var(--tr)}
+
+/* ========== WA PREVIEW ========== */
+.wa-bubble{
+  background:#1A2035;border:1px solid rgba(37,211,102,.2);
+  border-radius:12px 12px 12px 0;
+  padding:14px 16px;
+  font-size:13.5px;line-height:1.65;color:var(--pearl);
+  position:relative;margin-bottom:8px;
+}
+.wa-bubble::before{
+  content:'';position:absolute;
+  left:-8px;bottom:0;
+  border:8px solid transparent;
+  border-right-color:#1A2035;
+  border-bottom:0;
+  border-left:0;
+}
+.wa-header{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(37,211,102,.08);
+  border:1px solid rgba(37,211,102,.2);
+  border-radius:var(--r);
+  padding:10px 14px;margin-bottom:16px;
+}
+.wa-header i{color:#25D366;font-size:20px}
+.wa-header span{font-size:13px;color:var(--pearl);font-weight:500}
+.wa-time{font-size:11px;color:var(--pearl-dim);text-align:right;margin-top:4px}
+.wa-check{color:#53bdeb;margin-left:4px}
+
+/* ========== TOAST ========== */
+#toast{
+  position:fixed;bottom:28px;right:28px;
+  background:var(--navy-mid);
+  border:1px solid var(--gold);
+  border-radius:var(--r);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:10px;
+  font-size:13.5px;color:var(--white);
+  box-shadow:var(--sh);z-index:99999;
+  transform:translateX(130%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  max-width:320px;
+}
+#toast.show{transform:translateX(0)}
+#toast i{font-size:18px}
+
+/* ========== EMPTY STATE ========== */
+.empty-state{
+  text-align:center;padding:80px 20px;
+  color:var(--pearl-dim);
+}
+.empty-state i{font-size:56px;opacity:.25;color:var(--gold);margin-bottom:16px;display:block}
+.empty-state h3{font-family:var(--fd);font-size:1.3rem;color:var(--pearl);margin-bottom:8px}
+.empty-state p{font-size:14px;max-width:360px;margin:0 auto}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:1024px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .mobile-menu-btn{display:flex!important}
+}
+@media(max-width:640px){
+  .content{padding:16px}
+  .appt-card-main{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .appt-actions{flex-direction:row;grid-column:1/-1}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .expand-grid{grid-template-columns:1fr}
+  .form-grid2{grid-template-columns:1fr}
+  .filter-bar{gap:8px}
+}
+.mobile-menu-btn{
+  display:none;
+  width:36px;height:36px;background:var(--navy-mid);
+  border:1px solid rgba(201,168,76,.2);border-radius:var(--r);
+  align-items:center;justify-content:center;color:var(--pearl);font-size:17px;
+}
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:99;
+}
+.sidebar-overlay.open{display:block}
+
+/* Section headings */
+.section-h{font-family:var(--fd);font-size:1.2rem;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.section-h i{color:var(--gold)}
+.divider-line{border:none;border-top:1px solid rgba(201,168,76,.1);margin:28px 0}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><i class="fa-solid fa-tooth"></i></div>
+    <h1>Agenda del Doctor</h1>
+    <p>Dr. Alejandro Vega — Acceso exclusivo</p>
+    <div id="login-error" class="login-error"><i class="fa-solid fa-triangle-exclamation"></i> Usuario o contraseña incorrectos</div>
+    <div class="login-field">
+      <label>Usuario</label>
+      <input type="text" id="li-user" placeholder="doctor@consultorio.com" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">
+      <i class="fa-solid fa-right-to-bracket"></i> Ingresar a mi Agenda
+    </button>
+
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <!-- Sidebar overlay mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-row">
+        <div class="sidebar-icon"><i class="fa-solid fa-tooth"></i></div>
+        <div class="sidebar-name">Dr. Alejandro Vega<span>Consultorio Dental</span></div>
+      </div>
+    </div>
+
+    <div class="nav-section">Agenda</div>
+    <div class="nav-item active" onclick="showSection('citas',this)"><i class="fa-regular fa-calendar-check"></i> Mis Citas</div>
+    <div class="nav-item" onclick="showSection('hoy',this)"><i class="fa-solid fa-star"></i> Citas de Hoy</div>
+    <div class="nav-item" onclick="showSection('calendario',this)"><i class="fa-regular fa-calendar"></i> Calendario</div>
+
+    <div class="nav-section">Gestión</div>
+    <div class="nav-item" onclick="showSection('recordatorios',this)"><i class="fa-solid fa-bell"></i> Recordatorios <span id="pending-badge" style="margin-left:auto;background:var(--danger);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px"></span></div>
+    <div class="nav-item" onclick="showSection('nueva',this)"><i class="fa-solid fa-plus"></i> Nueva Cita</div>
+    <div class="nav-item" onclick="showSection('pacientes',this)"><i class="fa-solid fa-users"></i> Pacientes</div>
+
+    <div class="sidebar-footer">
+      <div class="doctor-info">
+        <div class="doctor-avatar">AV</div>
+        <div>
+          <div class="doctor-name-small">Dr. Alejandro Vega</div>
+          <div class="doctor-role-small">Cirujano Dentista</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="openSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-title" id="topbar-title">Mis Citas</div>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date" id="topbar-date"></span>
+        <a href="index.html" style="font-size:12.5px;color:var(--pearl-dim);display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(201,168,76,.15);border-radius:var(--r);transition:var(--tr)" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,.15)'">
+          <i class="fa-solid fa-globe"></i> Sitio web
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- STATS ROW -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon gold"><i class="fa-regular fa-calendar-check"></i></div>
+          <div><div class="stat-num" id="stat-today">0</div><div class="stat-label">Citas hoy</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+          <div><div class="stat-num" id="stat-confirmed">0</div><div class="stat-label">Confirmadas</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-regular fa-clock"></i></div>
+          <div><div class="stat-num" id="stat-pending">0</div><div class="stat-label">Pendientes</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-bell"></i></div>
+          <div><div class="stat-num" id="stat-reminders">0</div><div class="stat-label">Recordatorios pendientes</div></div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION: TODAS LAS CITAS ===== -->
+      <div id="sec-citas" class="app-section">
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterAppts('all',this)">Todas</button>
+          <button class="filter-btn" onclick="filterAppts('pending',this)">Pendientes</button>
+          <button class="filter-btn" onclick="filterAppts('confirmed',this)">Confirmadas</button>
+          <button class="filter-btn" onclick="filterAppts('cancelled',this)">Canceladas</button>
+          <div class="search-wrap">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Buscar paciente..." id="search-input" oninput="renderAppts()">
+          </div>
+          <input type="date" class="date-filter" id="date-filter" onchange="renderAppts()">
+          <div class="ml-auto">
+            <div class="view-tabs">
+              <button class="view-tab active" onclick="setView('list',this)"><i class="fa-solid fa-list"></i> Lista</button>
+              <button class="view-tab" onclick="setView('calendar',this)"><i class="fa-regular fa-calendar"></i> Mes</button>
+            </div>
+          </div>
+        </div>
+        <div id="view-list"><div id="appts-container"></div></div>
+        <div id="view-calendar">
+          <div class="cal-header">
+            <div class="cal-nav">
+              <button class="cal-nav-btn" onclick="calNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+              <div class="cal-title" id="cal-title"></div>
+              <button class="cal-nav-btn" onclick="calNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <button class="btn-sm btn-outline" onclick="calToday()">Hoy</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION: HOY ===== -->
+      <div id="sec-hoy" class="app-section" style="display:none">
+        <div class="section-h"><i class="fa-solid fa-sun"></i> Agenda de Hoy — <span id="hoy-fecha"></span></div>
+        <div id="hoy-container"></div>
+      </div>
+
+      <!-- ===== SECTION: CALENDARIO ===== -->
+      <div id="sec-calendario" class="app-section" style="display:none">
+        <div class="filter-bar">
+          <div class="cal-nav" style="display:flex;align-items:center;gap:12px">
+            <button class="cal-nav-btn" onclick="calNav2(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="cal-title" id="cal-title2" style="font-size:1.2rem"></div>
+            <button class="cal-nav-btn" onclick="calNav2(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="btn-sm btn-outline" onclick="calToday2()">Hoy</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="cal-grid2" style="gap:6px"></div>
+      </div>
+
+      <!-- ===== SECTION: RECORDATORIOS ===== -->
+      <div id="sec-recordatorios" class="app-section" style="display:none">
+        <div class="section-h"><i class="fa-solid fa-bell"></i> Recordatorios por WhatsApp</div>
+        <div style="background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);border-radius:var(--r);padding:14px 18px;font-size:13.5px;color:var(--pearl);margin-bottom:24px;display:flex;align-items:center;gap:12px">
+          <i class="fab fa-whatsapp" style="color:#25D366;font-size:22px"></i>
+          <span>Los mensajes de WhatsApp se envían automáticamente al número del paciente. El doctor también puede confirmar manualmente desde aquí.</span>
+        </div>
+        <div class="reminder-timeline" id="reminders-container"></div>
+      </div>
+
+      <!-- ===== SECTION: NUEVA CITA ===== -->
+      <div id="sec-nueva" class="app-section" style="display:none">
+        <div class="section-h"><i class="fa-solid fa-plus"></i> Registrar Nueva Cita</div>
+        <div style="background:var(--navy-mid);border:1px solid rgba(201,168,76,.15);border-radius:var(--rl);padding:36px;max-width:680px">
+          <div class="form-grid2">
+            <div class="form-group">
+              <label>Nombre completo *</label>
+              <input type="text" id="nc-name" placeholder="Nombre del paciente">
+            </div>
+            <div class="form-group">
+              <label>Teléfono / WhatsApp *</label>
+              <input type="tel" id="nc-phone" placeholder="477 123 4567">
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico</label>
+              <input type="email" id="nc-email" placeholder="correo@ejemplo.com">
+            </div>
+            <div class="form-group">
+              <label>Sucursal *</label>
+              <select id="nc-branch">
+                <option value="">Seleccionar</option>
+                <option value="leon">León</option>
+                <option value="penjamo">Pénjamo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Servicio *</label>
+              <select id="nc-service">
+                <option value="">Seleccionar</option>
+                <option>Limpieza dental</option>
+                <option>Consulta general</option>
+                <option>Ortodoncia</option>
+                <option>Blanqueamiento</option>
+                <option>Extracción</option>
+                <option>Endodoncia</option>
+                <option>Implante dental</option>
+                <option>Prótesis</option>
+                <option>Estética dental</option>
+                <option>Odontopediatría</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Fecha *</label>
+              <input type="date" id="nc-date">
+            </div>
+            <div class="form-group">
+              <label>Hora *</label>
+              <input type="time" id="nc-time" step="1800">
+            </div>
+            <div class="form-group">
+              <label>Estado</label>
+              <select id="nc-status">
+                <option value="pending">Pendiente</option>
+                <option value="confirmed">Confirmada</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Observaciones</label>
+            <textarea id="nc-notes" placeholder="Alergias, motivo de consulta, notas del doctor..."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="btn-sm btn-gold" style="padding:13px 28px;font-size:14px" onclick="saveNewAppt()"><i class="fa-solid fa-floppy-disk"></i> Guardar Cita</button>
+            <button class="btn-sm btn-outline" style="padding:13px 20px;font-size:14px" onclick="clearNewForm()"><i class="fa-solid fa-rotate-left"></i> Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION: PACIENTES ===== -->
+      <div id="sec-pacientes" class="app-section" style="display:none">
+        <div class="section-h"><i class="fa-solid fa-users"></i> Historial de Pacientes</div>
+        <div class="filter-bar" style="margin-bottom:20px">
+          <div class="search-wrap">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Buscar paciente..." id="pat-search" oninput="renderPatients()">
+          </div>
+        </div>
+        <div id="patients-container"></div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Reschedule -->
+<div class="modal-overlay" id="modal-reschedule">
+  <div class="modal">
+    <h3><i class="fa-solid fa-calendar-days"></i> Reagendar Cita</h3>
+    <input type="hidden" id="rs-id">
+    <div class="form-grid2">
+      <div class="form-group">
+        <label>Nueva Fecha *</label>
+        <input type="date" id="rs-date">
+      </div>
+      <div class="form-group">
+        <label>Nueva Hora *</label>
+        <input type="time" id="rs-time" step="1800">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Motivo (opcional)</label>
+      <input type="text" id="rs-reason" placeholder="Motivo del reagendamiento">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sm btn-outline" onclick="closeModal('modal-reschedule')">Cancelar</button>
+      <button class="btn-sm btn-gold" onclick="saveReschedule()"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- WA Preview / Send -->
+<div class="modal-overlay" id="modal-wa">
+  <div class="modal">
+    <h3><i class="fab fa-whatsapp" style="color:#25D366"></i> <span id="wa-modal-title">Confirmar por WhatsApp</span></h3>
+    <div class="wa-header">
+      <i class="fab fa-whatsapp"></i>
+      <span>Mensaje al paciente: <strong id="wa-patient-name">–</strong> (<span id="wa-patient-phone">–</span>)</span>
+    </div>
+    <div class="wa-bubble" id="wa-preview-text"></div>
+    <div class="wa-time">Ahora<span class="wa-check">✓✓</span></div>
+    <div class="modal-footer">
+      <button class="btn-sm btn-outline" onclick="closeModal('modal-wa')">Cancelar</button>
+      <button class="btn-sm" style="background:#25D366;color:#fff;flex:1;padding:12px;border-radius:var(--r);font-size:14px;font-weight:700" onclick="sendWA()">
+        <i class="fab fa-whatsapp"></i> Abrir WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><i id="toast-icon" class="fa-solid fa-circle-check"></i><span id="toast-msg"></span></div>
+
+<script>
+/* ============================================================
+   SHEETDB CONFIG
+   👇 Usa la MISMA URL que pusiste en el sitio principal
+============================================================ */
+const SHEETDB_URL = 'https://sheetdb.io/api/v1/7rzarzz8ows1k';
+
+const DOCTOR_WA = '524691136421';
+let currentUser = null;
+let appts = [];
+let filterStatus = 'all';
+let currentView = 'list';
+let calMonth = new Date().getMonth();
+let calYear  = new Date().getFullYear();
+let calMonth2 = calMonth, calYear2 = calYear;
+let currentWaAction = null;
+let isLoading = false;
+
+const USERS = {
+  'admin':                  '1234',
+  'doctor@consultorio.com': '1234'
+};
+
+/* ============================================================
+   SHEETDB HELPERS
+============================================================ */
+async function dbGetAll() {
+  const res = await fetch(SHEETDB_URL);
+  if (!res.ok) throw new Error('Error al cargar citas');
+  return await res.json();
+}
+
+async function dbInsert(row) {
+  const res = await fetch(SHEETDB_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: [row] })
+  });
+  if (!res.ok) throw new Error('Error al guardar');
+  return await res.json();
+}
+
+async function dbUpdate(id, fields) {
+  const res = await fetch(`${SHEETDB_URL}/id/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: fields })
+  });
+  if (!res.ok) throw new Error('Error al actualizar');
+  return await res.json();
+}
+
+async function dbDelete(id) {
+  const res = await fetch(`${SHEETDB_URL}/id/${id}`, {
+    method: 'DELETE'
+  });
+  if (!res.ok) throw new Error('Error al eliminar');
+  return await res.json();
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+function init() {
+  updateTopbarDate();
+  loadAppts();
+  setInterval(checkAutoReminders, 60000);
+}
+
+async function loadAppts() {
+  showGlobalLoading(true);
+  try {
+    const res = await fetch(SHEETDB_URL);
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`HTTP ${res.status}: ${txt}`);
+    }
+    const data = await res.json();
+    appts = Array.isArray(data) ? data : [];
+    if (appts.length === 0) {
+      showToast('Conexión OK — Sin citas aún');
+    }
+  } catch(e) {
+    appts = [];
+    console.error('SheetDB error:', e);
+    showErrorBanner(e.message);
+  }
+  showGlobalLoading(false);
+  renderAll();
+}
+
+function showErrorBanner(msg) {
+  const c = document.getElementById('appts-container');
+  if (!c) return;
+  c.innerHTML = `
+    <div style="background:rgba(201,76,76,.1);border:1px solid rgba(201,76,76,.3);border-radius:16px;padding:32px;text-align:center;max-width:600px;margin:0 auto">
+      <i class="fa-solid fa-triangle-exclamation" style="font-size:40px;color:var(--danger);display:block;margin-bottom:16px"></i>
+      <h3 style="font-family:var(--fd);color:var(--white);margin-bottom:12px">Error de conexión con SheetDB</h3>
+      <p style="color:var(--pearl-dim);font-size:13px;margin-bottom:20px;line-height:1.7">
+        <strong style="color:var(--danger)">${msg}</strong><br><br>
+        Esto ocurre cuando las columnas del Google Sheet no coinciden exactamente.<br>
+        Asegúrate de que la <strong style="color:var(--gold)">fila 1</strong> de tu Google Sheet tenga exactamente estas columnas:
+      </p>
+      <div style="background:var(--navy);border-radius:8px;padding:14px;font-size:12px;font-family:monospace;color:var(--gold);text-align:left;margin-bottom:20px;word-break:break-all;line-height:1.9">
+        id &nbsp;|&nbsp; name &nbsp;|&nbsp; phone &nbsp;|&nbsp; email &nbsp;|&nbsp; branch &nbsp;|&nbsp; service &nbsp;|&nbsp; date &nbsp;|&nbsp; time &nbsp;|&nbsp; notes &nbsp;|&nbsp; status &nbsp;|&nbsp; remindersSent &nbsp;|&nbsp; createdAt &nbsp;|&nbsp; createdByDoctor
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-sm btn-gold" onclick="loadAppts()"><i class="fa-solid fa-rotate-right"></i> Reintentar</button>
+        <a href="https://sheetdb.io/api/v1/7rzarzz8ows1k" target="_blank" class="btn-sm btn-outline">
+          <i class="fa-solid fa-external-link"></i> Probar API en navegador
+        </a>
+      </div>
+    </div>`;
+}
+
+function showGlobalLoading(on) {
+  isLoading = on;
+  const c = document.getElementById('appts-container');
+  if (c && on) c.innerHTML = `<div style="text-align:center;padding:60px;color:var(--pearl-dim)"><i class="fa-solid fa-spinner fa-spin" style="font-size:32px;color:var(--gold);margin-bottom:16px;display:block"></i>Cargando citas...</div>`;
+}
+
+function renderAll() {
+  updateStats();
+  renderAppts();
+  renderHoy();
+  renderReminders();
+  renderPatients();
+  renderCal();
+  renderCal2();
+  updatePendingBadge();
+}
+
+/* ============================================================
+   LOGIN / LOGOUT
+============================================================ */
+function doLogin() {
+  const u = document.getElementById('li-user').value.trim();
+  const p = document.getElementById('li-pass').value;
+  if (USERS[u] && USERS[u] === p) {
+    document.getElementById('login-error').style.display = 'none';
+    currentUser = u;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    document.getElementById('login-error').style.display = 'flex';
+    document.getElementById('li-pass').value = '';
+  }
+}
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('li-pass').value = '';
+  currentUser = null;
+  appts = [];
+}
+window.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+});
+
+/* ============================================================
+   TOPBAR DATE
+============================================================ */
+function updateTopbarDate() {
+  const now = new Date();
+  const str = now.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('topbar-date').textContent = str;
+  document.getElementById('hoy-fecha').textContent = str;
+}
+
+/* ============================================================
+   STATS
+============================================================ */
+function updateStats() {
+  const today = todayStr();
+  document.getElementById('stat-today').textContent = appts.filter(a => a.date === today).length;
+  document.getElementById('stat-confirmed').textContent = appts.filter(a => a.status === 'confirmed').length;
+  document.getElementById('stat-pending').textContent = appts.filter(a => a.status === 'pending').length;
+  document.getElementById('stat-reminders').textContent = getPendingReminders().length;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function showSection(name, el) {
+  document.querySelectorAll('.app-section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + name).style.display = 'block';
+  el.classList.add('active');
+  const titles = { citas:'Mis Citas', hoy:'Citas de Hoy', calendario:'Calendario', recordatorios:'Recordatorios WhatsApp', nueva:'Nueva Cita', pacientes:'Historial de Pacientes' };
+  document.getElementById('topbar-title').textContent = titles[name] || '';
+  closeSidebar();
+  if (name === 'citas') renderAppts();
+  if (name === 'hoy') renderHoy();
+  if (name === 'recordatorios') renderReminders();
+  if (name === 'pacientes') renderPatients();
+  if (name === 'calendario') renderCal2();
+}
+function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
+function setView(v, btn) {
+  currentView = v;
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('view-list').style.display = v === 'list' ? 'block' : 'none';
+  document.getElementById('view-calendar').style.display = v === 'calendar' ? 'block' : 'none';
+  if (v === 'calendar') renderCal();
+}
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function todayStr() { return new Date().toISOString().split('T')[0]; }
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d + 'T12:00:00').toLocaleDateString('es-MX',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+}
+function fmtDateFull(d) {
+  if (!d) return '—';
+  return new Date(d + 'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function branchLabel(b) { return b === 'leon' ? 'León' : b === 'penjamo' ? 'Pénjamo' : b || '—'; }
+function statusHtml(s) {
+  const m = { pending:'sb-pending', confirmed:'sb-confirmed', cancelled:'sb-cancelled', rescheduled:'sb-rescheduled' };
+  const l = { pending:'Pendiente', confirmed:'Confirmada', cancelled:'Cancelada', rescheduled:'Reagendada' };
+  return `<span class="status-badge ${m[s]||'sb-pending'}">${l[s]||s}</span>`;
+}
+
+/* ============================================================
+   RENDER APPOINTMENTS LIST
+============================================================ */
+function filterAppts(s, btn) {
+  filterStatus = s;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAppts();
+}
+
+function getFilteredAppts() {
+  const q  = (document.getElementById('search-input')?.value||'').toLowerCase();
+  const df = document.getElementById('date-filter')?.value||'';
+  return [...appts]
+    .filter(a => {
+      if (filterStatus !== 'all' && a.status !== filterStatus) return false;
+      if (df && a.date !== df) return false;
+      if (q && !a.name.toLowerCase().includes(q) && !a.service.toLowerCase().includes(q) && !(a.phone||'').includes(q)) return false;
+      return true;
+    })
+    .sort((a,b) => (a.date+a.time) < (b.date+b.time) ? 1 : -1);
+}
+
+function renderAppts() {
+  const list = getFilteredAppts();
+  const c = document.getElementById('appts-container');
+  if (!c) return;
+  if (isLoading) return;
+  if (list.length === 0) {
+    c.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><h3>Sin citas</h3><p>No hay citas que coincidan con los filtros. Las nuevas citas del sitio web aparecen aquí automáticamente.</p></div>`;
+    return;
+  }
+  c.innerHTML = list.map(a => apptCardHtml(a)).join('');
+}
+
+function apptCardHtml(a) {
+  const dt  = new Date(a.date + 'T12:00:00');
+  const day = dt.getDate();
+  const mon = dt.toLocaleDateString('es-MX',{month:'short'}).replace('.','').toUpperCase();
+  const yr  = dt.getFullYear();
+  const isToday = a.date === todayStr();
+  return `<div class="appt-card" id="card-${a.id}">
+    <div class="appt-card-main" onclick="toggleCard('${a.id}')">
+      <div class="appt-date-block" style="${isToday?'border-color:var(--gold);background:var(--gold-dim)':''}">
+        <div class="appt-date-day">${day}</div>
+        <div class="appt-date-mon">${mon}</div>
+        <div class="appt-date-year">${yr}</div>
+      </div>
+      <div class="appt-info">
+        <div class="appt-name">
+          ${a.name}
+          ${isToday?'<span style="background:var(--gold);color:var(--navy);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700">HOY</span>':''}
+        </div>
+        <div class="appt-meta">
+          <span><i class="fa-regular fa-clock"></i> ${a.time||'—'}</span>
+          <span><i class="fa-solid fa-tooth"></i> ${a.service||'—'}</span>
+          <span><i class="fa-solid fa-location-dot"></i> ${branchLabel(a.branch)}</span>
+          <span><i class="fa-solid fa-phone"></i> ${a.phone||'—'}</span>
+        </div>
+      </div>
+      <div class="appt-actions">
+        ${statusHtml(a.status)}
+        <button class="btn-sm btn-wa" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="event.stopPropagation();openWaModal('${a.id}','confirm')">
+          <i class="fab fa-whatsapp"></i> Confirmar WA
+        </button>
+      </div>
+    </div>
+    <div class="appt-card-expand">
+      <div class="expand-grid">
+        <div class="expand-item"><label>Correo</label><span>${a.email||'—'}</span></div>
+        <div class="expand-item"><label>Registrada el</label><span>${a.createdAt ? new Date(a.createdAt).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'}</span></div>
+        <div class="expand-item"><label>Sucursal</label><span>${branchLabel(a.branch)}</span></div>
+        <div class="expand-item"><label>Estado</label><span>${statusHtml(a.status)}</span></div>
+      </div>
+      ${a.notes ? `<div class="expand-notes"><i class="fa-solid fa-note-sticky" style="color:var(--gold);margin-right:6px"></i>${a.notes}</div>` : ''}
+      <div class="expand-actions">
+        <button class="btn-sm btn-green"  onclick="changeStatus('${a.id}','confirmed')"><i class="fa-solid fa-check"></i> Confirmar</button>
+        <button class="btn-sm" style="background:var(--warn-dim);color:var(--warn);border:1px solid rgba(224,160,48,.3);padding:8px 14px;border-radius:var(--r);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px" onclick="openReschedule('${a.id}')"><i class="fa-solid fa-calendar-days"></i> Reagendar</button>
+        <button class="btn-sm btn-red"    onclick="changeStatus('${a.id}','cancelled')"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        <button class="btn-sm btn-wa"     onclick="openWaModal('${a.id}','confirm')"><i class="fab fa-whatsapp"></i> WA Confirmar</button>
+        <button class="btn-sm btn-wa"     onclick="openWaModal('${a.id}','reminder')"><i class="fab fa-whatsapp"></i> WA Recordatorio</button>
+        <button class="btn-sm" style="background:rgba(201,76,76,.18);color:var(--danger);border:1px solid rgba(201,76,76,.3);padding:8px 14px;border-radius:var(--r);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px" onclick="confirmDelete('${a.id}','${a.name.replace(/'/g,"\\'")}')">
+          <i class="fa-solid fa-trash"></i> Eliminar
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('card-' + id);
+  if (!card) return;
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.appt-card.open').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+/* ============================================================
+   DELETE
+============================================================ */
+function confirmDelete(id, name) {
+  if (!confirm(`¿Eliminar permanentemente la cita de ${name}?\n\nEsta acción no se puede deshacer.`)) return;
+  deleteAppt(id);
+}
+
+async function deleteAppt(id) {
+  showToast('Eliminando cita...');
+  try {
+    await dbDelete(id);
+    appts = appts.filter(a => a.id != id);
+    showToast('Cita eliminada ✓');
+    renderAll();
+  } catch(e) {
+    showToast('Error al eliminar. Intenta de nuevo.', 'error');
+  }
+}
+
+/* ============================================================
+   HOY
+============================================================ */
+function renderHoy() {
+  const today = todayStr();
+  const todayAppts = appts.filter(a => a.date === today).sort((a,b) => a.time < b.time ? -1 : 1);
+  const c = document.getElementById('hoy-container');
+  if (!c) return;
+  if (todayAppts.length === 0) {
+    c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-mug-hot"></i><h3>Sin citas hoy</h3><p>No hay citas para hoy. ¡Las nuevas aparecerán aquí automáticamente!</p></div>`;
+    return;
+  }
+  c.innerHTML = todayAppts.map(a => `
+    <div class="appt-card" style="border-left:3px solid ${a.status==='confirmed'?'var(--success)':a.status==='cancelled'?'var(--danger)':'var(--gold)'}">
+      <div class="appt-card-main" onclick="toggleCard('${a.id}')">
+        <div class="appt-date-block" style="min-width:70px">
+          <div class="appt-date-day" style="font-size:20px">${a.time}</div>
+        </div>
+        <div class="appt-info">
+          <div class="appt-name">${a.name}</div>
+          <div class="appt-meta">
+            <span><i class="fa-solid fa-tooth"></i> ${a.service}</span>
+            <span><i class="fa-solid fa-location-dot"></i> ${branchLabel(a.branch)}</span>
+            <span><i class="fa-solid fa-phone"></i> ${a.phone}</span>
+          </div>
+        </div>
+        <div class="appt-actions">${statusHtml(a.status)}</div>
+      </div>
+      <div class="appt-card-expand">
+        ${a.notes?`<div class="expand-notes" style="margin-top:12px"><i class="fa-solid fa-note-sticky" style="color:var(--gold);margin-right:6px"></i>${a.notes}</div>`:''}
+        <div class="expand-actions" style="padding-top:12px">
+          <button class="btn-sm btn-green" onclick="changeStatus('${a.id}','confirmed')"><i class="fa-solid fa-check"></i> Confirmar</button>
+          <button class="btn-sm btn-red"   onclick="changeStatus('${a.id}','cancelled')"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+          <button class="btn-sm btn-wa"    onclick="openWaModal('${a.id}','confirm')"><i class="fab fa-whatsapp"></i> WA Confirmar</button>
+          <button class="btn-sm btn-wa"    onclick="openWaModal('${a.id}','reminder')"><i class="fab fa-whatsapp"></i> WA Recordatorio</button>
+          <button class="btn-sm" style="background:rgba(201,76,76,.18);color:var(--danger);border:1px solid rgba(201,76,76,.3);padding:8px 14px;border-radius:var(--r);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px" onclick="confirmDelete('${a.id}','${a.name.replace(/'/g,"\\'")}')">
+            <i class="fa-solid fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   CALENDAR
+============================================================ */
+const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DAYS_ES   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+function renderCal()  { document.getElementById('cal-title').textContent = `${MONTHS_ES[calMonth]} ${calYear}`; renderCalGrid('cal-grid', calMonth, calYear); }
+function renderCal2() { document.getElementById('cal-title2').textContent = `${MONTHS_ES[calMonth2]} ${calYear2}`; renderCalGrid('cal-grid2', calMonth2, calYear2); }
+function calNav(d)    { calMonth += d; if(calMonth>11){calMonth=0;calYear++}if(calMonth<0){calMonth=11;calYear--} renderCal(); }
+function calToday()   { calMonth=new Date().getMonth(); calYear=new Date().getFullYear(); renderCal(); }
+function calNav2(d)   { calMonth2 += d; if(calMonth2>11){calMonth2=0;calYear2++}if(calMonth2<0){calMonth2=11;calYear2--} renderCal2(); }
+function calToday2()  { calMonth2=new Date().getMonth(); calYear2=new Date().getFullYear(); renderCal2(); }
+
+function renderCalGrid(gridId, month, year) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  const todayFull = todayStr();
+  const firstDay  = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const daysInPrev  = new Date(year, month, 0).getDate();
+
+  let html = DAYS_ES.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+  for (let i = firstDay-1; i >= 0; i--) html += `<div class="cal-cell other-month"><div class="cal-day-num">${daysInPrev-i}</div></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr  = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayAppts = appts.filter(a => a.date === dateStr);
+    const isToday  = dateStr === todayFull;
+    const pills = dayAppts.slice(0,3).map(a =>
+      `<div class="cal-appt-pill ${a.status==='cancelled'?'cancelled':a.status==='confirmed'?'':'pending'}">${a.time} ${a.name.split(' ')[0]}</div>`
+    ).join('');
+    const more = dayAppts.length > 3 ? `<div class="cal-more">+${dayAppts.length-3} más</div>` : '';
+    html += `<div class="cal-cell ${isToday?'today':''} ${dayAppts.length?'has-appts':''}" onclick="jumpToDate('${dateStr}')">
+      <div class="cal-day-num">${isToday?`<div style="background:var(--gold);color:var(--navy);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">${d}</div>`:d}</div>
+      ${pills}${more}</div>`;
+  }
+  const remaining = (firstDay + daysInMonth) % 7 === 0 ? 0 : 7 - ((firstDay + daysInMonth) % 7);
+  for (let i = 1; i <= remaining; i++) html += `<div class="cal-cell other-month"><div class="cal-day-num">${i}</div></div>`;
+  grid.innerHTML = html;
+}
+
+function jumpToDate(dateStr) {
+  document.getElementById('date-filter').value = dateStr;
+  filterStatus = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  currentView = 'list';
+  document.getElementById('view-list').style.display = 'block';
+  document.getElementById('view-calendar').style.display = 'none';
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view-tab')[0].classList.add('active');
+  renderAppts();
+  showSection('citas', document.querySelectorAll('.nav-item')[0]);
+}
+
+/* ============================================================
+   STATUS CHANGE
+============================================================ */
+async function changeStatus(id, status) {
+  showToast('Actualizando...');
+  try {
+    await dbUpdate(id, { status });
+    const idx = appts.findIndex(a => a.id == id);
+    if (idx !== -1) appts[idx].status = status;
+    const msgs = { confirmed:'✓ Cita confirmada', cancelled:'Cita cancelada', rescheduled:'Cita reagendada' };
+    showToast(msgs[status] || 'Actualizado');
+    renderAll();
+    if (status === 'confirmed') openWaModal(id, 'confirm');
+  } catch(e) {
+    showToast('Error al actualizar', 'error');
+  }
+}
+
+/* ============================================================
+   RESCHEDULE
+============================================================ */
+function openReschedule(id) {
+  document.getElementById('rs-id').value = id;
+  const a = appts.find(x => x.id == id);
+  document.getElementById('rs-date').value = a.date;
+  document.getElementById('rs-time').value = a.time;
+  document.getElementById('rs-reason').value = '';
+  openModal('modal-reschedule');
+}
+async function saveReschedule() {
+  const id   = document.getElementById('rs-id').value;
+  const date = document.getElementById('rs-date').value;
+  const time = document.getElementById('rs-time').value;
+  if (!date || !time) { showToast('Completa fecha y hora','error'); return; }
+  try {
+    await dbUpdate(id, { date, time, status: 'rescheduled', remindersSent: '' });
+    const idx = appts.findIndex(a => a.id == id);
+    if (idx !== -1) { appts[idx].date = date; appts[idx].time = time; appts[idx].status = 'rescheduled'; appts[idx].remindersSent = ''; }
+    closeModal('modal-reschedule');
+    showToast('Cita reagendada ✓');
+    renderAll();
+    setTimeout(() => openWaModal(id, 'reschedule'), 400);
+  } catch(e) { showToast('Error al reagendar','error'); }
+}
+
+/* ============================================================
+   NEW APPOINTMENT (desde agenda del doctor)
+============================================================ */
+async function saveNewAppt() {
+  const name   = document.getElementById('nc-name').value.trim();
+  const phone  = document.getElementById('nc-phone').value.trim();
+  const branch = document.getElementById('nc-branch').value;
+  const service= document.getElementById('nc-service').value;
+  const date   = document.getElementById('nc-date').value;
+  const time   = document.getElementById('nc-time').value;
+  if (!name||!phone||!branch||!service||!date||!time) { showToast('Completa todos los campos requeridos','error'); return; }
+
+  const appt = {
+    id: Date.now().toString(),
+    name, phone,
+    email: document.getElementById('nc-email').value.trim(),
+    branch, service, date, time,
+    notes: document.getElementById('nc-notes').value.trim(),
+    status: document.getElementById('nc-status').value,
+    createdAt: new Date().toISOString(),
+    remindersSent: '',
+    createdByDoctor: 'true'
+  };
+  try {
+    await dbInsert(appt);
+    appts.push(appt);
+    showToast('Cita registrada ✓');
+    clearNewForm();
+    renderAll();
+    setTimeout(() => openWaModal(appt.id, 'confirm'), 400);
+  } catch(e) { showToast('Error al guardar','error'); }
+}
+function clearNewForm() {
+  ['nc-name','nc-phone','nc-email','nc-date','nc-time','nc-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  ['nc-branch','nc-service','nc-status'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=el.options[0].value});
+}
+
+/* ============================================================
+   PATIENTS
+============================================================ */
+function renderPatients() {
+  const c = document.getElementById('patients-container');
+  if (!c) return;
+  const q = (document.getElementById('pat-search')?.value||'').toLowerCase();
+  const map = {};
+  appts.forEach(a => {
+    const key = a.phone || a.name;
+    if (!map[key]) map[key] = { name:a.name, phone:a.phone, email:a.email, visits:[], services:[] };
+    map[key].visits.push(a.date);
+    if (a.service && !map[key].services.includes(a.service)) map[key].services.push(a.service);
+  });
+  let rows = Object.values(map);
+  if (q) rows = rows.filter(p => p.name.toLowerCase().includes(q) || (p.phone||'').includes(q));
+  if (rows.length === 0) {
+    c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-users"></i><h3>Sin pacientes</h3><p>Los pacientes aparecerán aquí cuando tengan citas registradas.</p></div>`;
+    return;
+  }
+  c.innerHTML = `<div style="background:var(--navy-mid);border:1px solid rgba(201,168,76,.12);border-radius:var(--rl);overflow:hidden">
+    <table style="width:100%;border-collapse:collapse;font-size:13.5px">
+      <thead><tr style="background:var(--navy)">
+        <th style="padding:12px 16px;text-align:left;color:var(--gold);font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,.15)">Paciente</th>
+        <th style="padding:12px 16px;text-align:left;color:var(--gold);font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,.15)">Teléfono</th>
+        <th style="padding:12px 16px;text-align:left;color:var(--gold);font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,.15)">Servicios</th>
+        <th style="padding:12px 16px;text-align:left;color:var(--gold);font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,.15)">Citas</th>
+        <th style="padding:12px 16px;text-align:left;color:var(--gold);font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,.15)">Acción</th>
+      </tr></thead>
+      <tbody>${rows.map(p => `<tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+        <td style="padding:12px 16px"><strong style="color:var(--white)">${p.name}</strong><br><span style="font-size:11px;color:var(--pearl-dim)">${p.email||'Sin correo'}</span></td>
+        <td style="padding:12px 16px;color:var(--pearl-dim)">${p.phone||'—'}</td>
+        <td style="padding:12px 16px;font-size:12px;color:var(--pearl-dim)">${p.services.slice(0,2).join(', ')||'—'}</td>
+        <td style="padding:12px 16px"><strong style="color:var(--gold)">${p.visits.length}</strong></td>
+        <td style="padding:12px 16px">
+          <a href="https://wa.me/52${(p.phone||'').replace(/\D/g,'')}" target="_blank" class="btn-sm btn-wa" style="padding:5px 10px;font-size:11px;display:inline-flex;align-items:center;gap:5px;border-radius:var(--r)">
+            <i class="fab fa-whatsapp"></i> WA
+          </a>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>`;
+}
+
+/* ============================================================
+   REMINDERS
+============================================================ */
+function minutesUntilAppt(a) {
+  if (!a.date || !a.time) return null;
+  return (new Date(`${a.date}T${a.time}:00`) - new Date()) / 60000;
+}
+function getPendingReminders() {
+  const pending = [];
+  appts.forEach(a => {
+    if (a.status === 'cancelled') return;
+    const mins = minutesUntilAppt(a);
+    if (mins === null) return;
+    const sent = (a.remindersSent || '').split(',');
+    if (mins <= 1470 && mins > 1380 && !sent.includes('24h')) pending.push({appt:a,type:'24h'});
+    if (mins <= 210  && mins > 150  && !sent.includes('3h'))  pending.push({appt:a,type:'3h'});
+    if (mins <= 80   && mins > 40   && !sent.includes('1h'))  pending.push({appt:a,type:'1h'});
+  });
+  return pending;
+}
+function checkAutoReminders() { updatePendingBadge(); }
+function updatePendingBadge() {
+  const n = getPendingReminders().length;
+  const badge = document.getElementById('pending-badge');
+  badge.textContent = n > 0 ? n : '';
+  badge.style.display = n > 0 ? 'inline-block' : 'none';
+  document.getElementById('stat-reminders').textContent = n;
+}
+
+function renderReminders() {
+  const c = document.getElementById('reminders-container');
+  if (!c) return;
+  const upcoming = appts.filter(a => a.status !== 'cancelled' && a.date >= todayStr())
+    .sort((a,b) => (a.date+a.time) < (b.date+b.time) ? -1 : 1).slice(0,30);
+  if (upcoming.length === 0) {
+    c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-bell-slash"></i><h3>Sin citas próximas</h3><p>Los recordatorios aparecerán aquí cuando haya citas pendientes.</p></div>`;
+    return;
+  }
+  c.innerHTML = upcoming.map(a => {
+    const mins = minutesUntilAppt(a);
+    const sent = (a.remindersSent || '').split(',');
+    const types = [
+      { key:'24h', label:'24 h antes', threshold:24*60 },
+      { key:'3h',  label:'3 h antes',  threshold:3*60  },
+      { key:'1h',  label:'1 h antes',  threshold:60    },
+    ];
+    const rows = types.map(t => {
+      const isSent    = sent.includes(t.key);
+      const isPending = !isSent && mins !== null && mins > 0 && mins < t.threshold+30;
+      let cls = '', lbl = t.label;
+      if (isSent)    { cls = 'sent';    lbl = '✓ Enviado'; }
+      else if (isPending) { cls = 'overdue'; lbl = '¡Enviar ahora!'; }
+      return `<div class="reminder-item">
+        <div class="reminder-time ${cls}">${lbl}</div>
+        <div class="reminder-info">
+          <div class="reminder-name">${a.name}</div>
+          <div class="reminder-detail">${fmtDate(a.date)} · ${a.time} · ${a.service} · ${branchLabel(a.branch)}</div>
+        </div>
+        <div class="reminder-send">
+          ${isSent
+            ? `<span style="color:var(--success);font-size:12px;display:flex;align-items:center;gap:4px"><i class="fa-solid fa-circle-check"></i> Enviado</span>`
+            : `<button class="btn-sm btn-wa" style="font-size:12px;padding:6px 12px" onclick="sendReminder('${a.id}','${t.key}')"><i class="fab fa-whatsapp"></i> Enviar</button>`
+          }
+        </div>
+      </div>`;
+    }).join('');
+    return `<div style="background:var(--navy);border:1px solid rgba(201,168,76,.1);border-radius:var(--rl);overflow:hidden;margin-bottom:16px">
+      <div style="padding:14px 18px;border-bottom:1px solid rgba(201,168,76,.1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div>
+          <strong style="color:var(--white);font-size:15px">${a.name}</strong>
+          <span style="margin-left:10px">${statusHtml(a.status)}</span>
+          <div style="font-size:12.5px;color:var(--pearl-dim);margin-top:3px">${fmtDateFull(a.date)} · ${a.time} · ${branchLabel(a.branch)}</div>
+        </div>
+        <button class="btn-sm btn-wa" style="font-size:12px;padding:7px 14px" onclick="openWaModal('${a.id}','reminder_custom')">
+          <i class="fab fa-whatsapp"></i> Mensaje libre
+        </button>
+      </div>
+      <div style="padding:12px 18px;display:flex;flex-direction:column;gap:8px">${rows}</div>
+    </div>`;
+  }).join('');
+}
+
+function sendReminder(id, type) { openWaModal(id, 'reminder_' + type); }
+
+/* ============================================================
+   WHATSAPP
+============================================================ */
+function buildWaMessage(a, type) {
+  const dateStr = fmtDateFull(a.date);
+  const branch  = branchLabel(a.branch);
+  const clinic  = 'Consultorio Dental Dr. Stiven Max';
+  const msgs = {
+    confirm:   `🦷 *${clinic}*\n\nHola ${a.name.split(' ')[0]} 👋\n\n✅ Tu cita ha sido *CONFIRMADA*:\n\n📅 *Fecha:* ${dateStr}\n⏰ *Hora:* ${a.time}\n🔬 *Servicio:* ${a.service}\n📍 *Sucursal:* ${branch}\n\nPor favor llega 5 minutos antes. Para cancelar escríbenos con 4 h de anticipación.\n\n¡Te esperamos! 😊\n_Equipo del Dr. Stiven Max_`,
+    reminder:  `🔔 *RECORDATORIO DE CITA*\n\n${clinic}\n\nHola ${a.name.split(' ')[0]}, te recordamos tu cita próximamente:\n\n📅 ${dateStr}\n⏰ ${a.time}\n🔬 ${a.service}\n📍 ${branch}\n\n¿Alguna duda? Contáctanos. 🦷`,
+    reminder_24h: `⏰ *Recordatorio — 24 horas*\n\n${clinic}\n\nHola ${a.name.split(' ')[0]} 👋\n\n*Mañana* tienes tu cita dental:\n\n📅 ${dateStr}\n⏰ ${a.time}\n🔬 ${a.service}\n📍 ${branch}\n\n¡Hasta mañana! 😊`,
+    reminder_3h:  `⏰ *Recordatorio — 3 horas*\n\n${clinic}\n\nHola ${a.name.split(' ')[0]}, tu cita es *en 3 horas*:\n\n⏰ ${a.time} · ${a.service}\n📍 ${branch}\n\n¡Ya casi! Recuerda traer identificación. 🦷`,
+    reminder_1h:  `🚨 *Recordatorio — 1 hora*\n\n${clinic}\n\nHola ${a.name.split(' ')[0]}, tu cita es *en 1 hora*:\n\n⏰ ${a.time} · ${a.service}\n📍 ${branch}\n\n¡No llegues tarde! 🙏`,
+    reminder_custom: `🦷 *${clinic}*\n\nHola ${a.name.split(' ')[0]}, te recordamos tu cita:\n\n📅 ${dateStr} a las ${a.time}\n🔬 ${a.service} — ${branch}\n\n¿Tienes alguna duda? ¡Estamos para ayudarte! 😊`,
+    reschedule: `📅 *CITA REAGENDADA*\n\n${clinic}\n\nHola ${a.name.split(' ')[0]} 👋\n\nTu cita ha sido *reagendada*:\n\n📅 *Nueva Fecha:* ${dateStr}\n⏰ *Nueva Hora:* ${a.time}\n🔬 *Servicio:* ${a.service}\n📍 *Sucursal:* ${branch}\n\n¡Gracias por tu comprensión! 🙏`,
+    cancel:     `❌ *CITA CANCELADA*\n\n${clinic}\n\nHola ${a.name.split(' ')[0]},\n\nTu cita del ${dateStr} a las ${a.time} ha sido *cancelada*.\n\nPuedes reagendar cuando gustes en nuestro sitio web o escribiéndonos.\n\n¡Hasta pronto! 🦷`
+  };
+  return msgs[type] || msgs.reminder;
+}
+
+function buildWaTitleLabel(type) {
+  return { confirm:'Confirmar por WA', reminder:'Recordatorio WA', reminder_24h:'Recordatorio 24h', reminder_3h:'Recordatorio 3h', reminder_1h:'Recordatorio 1h', reminder_custom:'Mensaje libre', reschedule:'Reagendamiento WA', cancel:'Cancelación WA' }[type] || 'Mensaje WA';
+}
+
+function openWaModal(id, type) {
+  const a = appts.find(x => x.id == id);
+  if (!a) return;
+  currentWaAction = { id, type };
+  document.getElementById('wa-modal-title').textContent = buildWaTitleLabel(type);
+  document.getElementById('wa-patient-name').textContent  = a.name;
+  document.getElementById('wa-patient-phone').textContent = a.phone || '(sin teléfono)';
+  document.getElementById('wa-preview-text').innerHTML = buildWaMessage(a, type).replace(/\*(.*?)\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  openModal('modal-wa');
+}
+
+async function sendWA() {
+  if (!currentWaAction) return;
+  const { id, type } = currentWaAction;
+  const a = appts.find(x => x.id == id);
+  if (!a) return;
+  const msg   = buildWaMessage(a, type);
+  const phone = (a.phone||'').replace(/\D/g,'');
+  window.open(`https://wa.me/${phone.startsWith('52')?phone:'52'+phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  // Marcar recordatorio como enviado en SheetDB
+  const remMap = { reminder_24h:'24h', reminder_3h:'3h', reminder_1h:'1h' };
+  if (remMap[type]) {
+    const idx  = appts.findIndex(x => x.id == id);
+    const sent = (appts[idx].remindersSent || '').split(',').filter(Boolean);
+    if (!sent.includes(remMap[type])) {
+      sent.push(remMap[type]);
+      const newSent = sent.join(',');
+      try {
+        await dbUpdate(id, { remindersSent: newSent });
+        appts[idx].remindersSent = newSent;
+      } catch(e) {}
+    }
+  }
+  if (type === 'confirm') {
+    const idx = appts.findIndex(x => x.id == id);
+    if (appts[idx].status === 'pending') {
+      try { await dbUpdate(id, { status:'confirmed' }); appts[idx].status = 'confirmed'; } catch(e) {}
+    }
+  }
+  closeModal('modal-wa');
+  showToast('WhatsApp abierto ✓');
+  renderAll();
+}
+
+/* ============================================================
+   MODAL / TOAST
+============================================================ */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+let toastTimer;
+function showToast(msg, type='success') {
+  clearTimeout(toastTimer);
+  const t = document.getElementById('toast');
+  const i = document.getElementById('toast-icon');
+  document.getElementById('toast-msg').textContent = msg;
+  i.className = type === 'error' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-check';
+  i.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
+  t.classList.add('show');
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3800);
+}
+</script>
+</body>
+</html>

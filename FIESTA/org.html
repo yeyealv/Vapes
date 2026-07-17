@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizadores · Fiesta de Uriel & Yeye</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--bg:#0A0A0F;--surface:#13131E;--card:#1C1C2E;--card2:#212135;--purple:#C084FC;--pink:#F472B6;--purple-dim:#7C3AED;--text:#F8F8FF;--muted:#8888AA;--border:#2A2A3E;--error:#F87171;--success:#34D399;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
+
+  .login-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+  .login-card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 32px;text-align:center;}
+  .login-icon{font-size:2.5rem;margin-bottom:16px;}
+  .login-card h1{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.06em;margin-bottom:6px;}
+  .login-card p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;}
+  .login-card input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-size:0.95rem;color:var(--text);font-family:'Inter',sans-serif;outline:none;text-align:center;letter-spacing:0.15em;margin-bottom:16px;transition:border-color 0.2s;}
+  .login-card input:focus{border-color:var(--purple);}
+  .login-card input.shake{animation:shake 0.35s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}60%{transform:translateX(6px)}}
+  .login-error{font-size:0.78rem;color:var(--error);margin-bottom:14px;display:none;}
+  .login-error.show{display:block;}
+  .btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--purple-dim),var(--purple),var(--pink));border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:#fff;cursor:pointer;}
+
+  #dashboard{display:none;}
+  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .topbar-left h1{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.06em;background:linear-gradient(135deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .topbar-left p{font-size:0.78rem;color:var(--muted);margin-top:2px;}
+  .topbar-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .btn-icon{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:0.8rem;font-weight:600;color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+  .btn-icon:hover{border-color:var(--purple);}
+  .btn-logout{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:0.8rem;font-weight:600;color:var(--muted);cursor:pointer;}
+  .btn-logout:hover{border-color:var(--error);color:var(--error);}
+  .live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:100px;padding:4px 12px;font-size:0.72rem;font-weight:600;color:var(--success);}
+  .live-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 1.5s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;padding:28px 32px 0;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;}
+  .stat-card .label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .stat-card .value{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:0.04em;color:var(--purple);line-height:1;}
+  .stat-card .sub{font-size:0.75rem;color:var(--muted);margin-top:4px;}
+
+  .content{padding:28px 32px 60px;}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .toolbar h2{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.04em;}
+  .toolbar-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .search-wrap{position:relative;width:220px;}
+  .search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px 9px 36px;font-size:0.85rem;color:var(--text);font-family:'Inter',sans-serif;outline:none;}
+  .search-wrap input:focus{border-color:var(--purple);}
+  .search-wrap::before{content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:0.75rem;pointer-events:none;}
+  .btn-refresh{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:0.8rem;font-weight:600;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+  .btn-refresh:hover{border-color:var(--purple);}
+  .btn-export{background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:8px;padding:8px 14px;font-size:0.8rem;font-weight:600;color:var(--success);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;}
+  thead tr{background:var(--card2);border-bottom:1px solid var(--border);}
+  thead th{padding:14px 18px;text-align:left;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+  tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:rgba(192,132,252,0.04);}
+  tbody td{padding:13px 18px;font-size:0.87rem;color:var(--text);}
+  .badge-edad{display:inline-block;background:rgba(192,132,252,0.12);color:var(--purple);border-radius:100px;padding:3px 10px;font-size:0.75rem;font-weight:600;}
+  .date{color:var(--muted);font-size:0.78rem;}
+  .btn-del{background:none;border:1px solid transparent;border-radius:6px;padding:5px 10px;font-size:0.75rem;color:var(--error);cursor:pointer;}
+  .btn-del:hover{border-color:var(--error);background:rgba(248,113,113,0.08);}
+
+  .empty-state{text-align:center;padding:70px 30px;}
+  .empty-state .big{font-size:3rem;margin-bottom:16px;}
+  .empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--muted);margin-bottom:8px;}
+  .empty-state p{font-size:0.85rem;color:var(--muted);}
+
+  .loading-state{text-align:center;padding:60px;color:var(--muted);font-size:0.9rem;}
+
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(10,10,15,0.85);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .modal-bg.show{display:flex;}
+  .modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px 28px;max-width:360px;width:90%;text-align:center;}
+  .modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;margin-bottom:10px;}
+  .modal p{font-size:0.85rem;color:var(--muted);margin-bottom:24px;line-height:1.55;}
+  .modal-btns{display:flex;gap:12px;}
+  .btn-cancel{flex:1;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;}
+  .btn-confirm-del{flex:1;padding:12px;background:rgba(248,113,113,0.15);border:1px solid var(--error);border-radius:10px;color:var(--error);font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;}
+
+  @media(max-width:640px){
+    .topbar,.stats-grid,.content{padding-left:18px;padding-right:18px;}
+    .search-wrap{width:100%;}
+    thead th,tbody td{padding:10px 12px;font-size:0.8rem;}
+    .topbar{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <h1>Acceso Organizadores</h1>
+    <p>Solo para el equipo organizador de la fiesta de Uriel & Yeye</p>
+    <input type="password" id="pass-input" placeholder="Contraseña" onkeydown="if(event.key==='Enter')login()">
+    <div class="login-error" id="login-error">Contraseña incorrecta. Intenta de nuevo.</div>
+    <button class="btn-login" onclick="login()">ENTRAR</button>
+  </div>
+</div>
+
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>🎉 Fiesta de Uriel & Yeye · Organizadores</h1>
+      <p>25 de julio · Solo acceso interno</p>
+    </div>
+    <div class="topbar-right">
+      <div class="live-badge"><span class="live-dot"></span> EN VIVO</div>
+      <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total registrados</div>
+      <div class="value" id="stat-total">—</div>
+      <div class="sub">invitados confirmados</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Edad promedio</div>
+      <div class="value" id="stat-edad">—</div>
+      <div class="sub">años</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Último registro</div>
+      <div class="value" style="font-size:1.2rem;padding-top:8px;" id="stat-ultimo">—</div>
+      <div class="sub" id="stat-ultimo-fecha"></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="toolbar">
+      <h2>Lista de Invitados</h2>
+      <div class="toolbar-actions">
+        <div class="search-wrap">
+          <input type="text" id="search-input" placeholder="Buscar nombre..." oninput="filtrar()">
+        </div>
+        <button class="btn-refresh" onclick="cargarLista()">🔄 Actualizar</button>
+        <button class="btn-export" onclick="exportarCSV()">📥 CSV</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading-state" id="loading-state">⏳ Cargando lista...</div>
+      <table id="tabla" style="display:none;">
+        <thead>
+          <tr>
+            <th>#</th><th>Nombre</th><th>WhatsApp</th><th>Edad</th><th>Registro</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body"></tbody>
+      </table>
+      <div class="empty-state" id="empty-state" style="display:none;">
+        <div class="big">🎈</div>
+        <h3>La lista está vacía</h3>
+        <p>Nadie se ha registrado todavía.<br>Comparte el link para que la gente se apunte.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3>¿Eliminar invitado?</h3>
+    <p id="modal-msg">Esta acción no se puede deshacer.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm-del" onclick="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEETDB = 'https://sheetdb.io/api/v1/xzd5b2pr4aje2';
+const PASSWORD = 'nomames2026';
+let todosLosInvitados = [];
+let deleteNombre = null;
+let deleteTelefono = null;
+let autoInterval = null;
+
+function login() {
+  const val = document.getElementById('pass-input').value;
+  if(val === PASSWORD) {
+    sessionStorage.setItem('org_auth','1');
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    cargarLista();
+    autoInterval = setInterval(cargarLista, 30000);
+    document.getElementById('login-error').classList.remove('show');
+  } else {
+    document.getElementById('login-error').classList.add('show');
+    const inp = document.getElementById('pass-input');
+    inp.classList.add('shake');
+    inp.value = '';
+    setTimeout(()=>inp.classList.remove('shake'), 400);
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('org_auth');
+  clearInterval(autoInterval);
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-wrap').style.display = 'flex';
+  document.getElementById('pass-input').value = '';
+}
+
+if(sessionStorage.getItem('org_auth')==='1') {
+  document.getElementById('login-wrap').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  cargarLista();
+  autoInterval = setInterval(cargarLista, 30000);
+}
+
+async function cargarLista() {
+  try {
+    const res = await fetch(SHEETDB + '?limit=500');
+    const data = await res.json();
+    todosLosInvitados = Array.isArray(data) ? data : [];
+    filtrar();
+    updateStats();
+    document.getElementById('loading-state').style.display = 'none';
+  } catch(e) {
+    document.getElementById('loading-state').textContent = '❌ Error al cargar. Verifica tu conexión.';
+    document.getElementById('loading-state').style.display = 'block';
+  }
+}
+
+function filtrar() {
+  const q = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+  const lista = q ? todosLosInvitados.filter(i => (i.nombre||'').toLowerCase().includes(q)) : todosLosInvitados;
+  renderTabla(lista);
+}
+
+function renderTabla(lista) {
+  const tbody = document.getElementById('tabla-body');
+  const empty = document.getElementById('empty-state');
+  const tabla = document.getElementById('tabla');
+  tbody.innerHTML = '';
+
+  if(!lista || lista.length === 0) {
+    tabla.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  tabla.style.display = 'table';
+  empty.style.display = 'none';
+
+  lista.forEach((inv, idx) => {
+    const tel = (inv.telefono||'').replace(/\D/g,'');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:var(--muted);font-size:0.78rem;">${idx+1}</td>
+      <td><strong>${esc(inv.nombre||'')}</strong></td>
+      <td><a href="https://wa.me/${tel}" target="_blank" style="color:var(--success);text-decoration:none;">📱 ${esc(inv.telefono||'')}</a></td>
+      <td><span class="badge-edad">${esc(inv.edad||'')} años</span></td>
+      <td><span class="date">${esc(inv.fecha||'')}</span></td>
+      <td><button class="btn-del" onclick="openModal('${esc(inv.nombre||'')}','${esc(inv.telefono||'')}')">Eliminar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function updateStats() {
+  const lista = todosLosInvitados;
+  document.getElementById('stat-total').textContent = lista.length;
+  if(!lista.length) {
+    document.getElementById('stat-edad').textContent = '—';
+    document.getElementById('stat-ultimo').textContent = '—';
+    document.getElementById('stat-ultimo-fecha').textContent = '';
+    return;
+  }
+  const edades = lista.map(i=>parseInt(i.edad)).filter(e=>!isNaN(e));
+  const prom = edades.length ? Math.round(edades.reduce((a,b)=>a+b,0)/edades.length) : '—';
+  document.getElementById('stat-edad').textContent = prom;
+  const ultimo = lista[lista.length-1];
+  document.getElementById('stat-ultimo').textContent = (ultimo.nombre||'').split(' ')[0];
+  document.getElementById('stat-ultimo-fecha').textContent = ultimo.fecha||'';
+}
+
+function openModal(nombre, telefono) {
+  deleteNombre = nombre;
+  deleteTelefono = telefono;
+  document.getElementById('modal-msg').textContent = `¿Eliminar a ${nombre} de la lista?`;
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('show');
+  deleteNombre = null;
+  deleteTelefono = null;
+}
+
+async function confirmDelete() {
+  if(!deleteTelefono) return;
+  try {
+    const res = await fetch(`${SHEETDB}/telefono/${encodeURIComponent(deleteTelefono)}`, { method: 'DELETE' });
+    const data = await res.json();
+    closeModal();
+    await cargarLista();
+  } catch(e) {
+    alert('Error al eliminar. Intenta de nuevo.');
+    closeModal();
+  }
+}
+
+document.getElementById('modal-bg').addEventListener('click', e => { if(e.target===document.getElementById('modal-bg')) closeModal(); });
+
+function exportarCSV() {
+  if(!todosLosInvitados.length){ alert('No hay registros para exportar.'); return; }
+  const rows = [['#','Nombre','Teléfono','Edad','Fecha']];
+  todosLosInvitados.forEach((i,idx)=>rows.push([idx+1,i.nombre,i.telefono,i.edad,i.fecha]));
+  const csv = rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download='invitados_fiesta_uriel_yeye.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

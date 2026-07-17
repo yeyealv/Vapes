@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEPROTEL - Servicios Integrales Ejecutivos y Turísticos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #2B3490;
+    --pink: #ffffff3d;
+    --dark: #1a1a2e;
+    --charcoal: #333344;
+    --light: #f8f8fc;
+    --white: #ffffff;
+    --gray: #888899;
+    --light-gray: #f0f0f5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--charcoal);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(43,52,144,0.08);
+    transition: all 0.4s ease;
+  }
+
+  nav.scrolled {
+    height: 64px;
+    box-shadow: 0 4px 30px rgba(43,52,144,0.12);
+  }
+
+  .nav-logo img {
+    height: 44px;
+    transition: all 0.3s ease;
+  }
+
+  nav.scrolled .nav-logo img { height: 36px; }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--charcoal);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 2px;
+    background: var(--pink);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-social {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .nav-social a {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(43,52,144,0.2);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    color: var(--navy);
+    font-size: 0.75rem;
+    transition: all 0.3s;
+  }
+
+  .nav-social a:hover {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+    transform: translateY(-2px);
+  }
+
+  /* ===== HERO ===== */
+  #inicio {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--dark);
+  }
+
+  .hero-slider {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .hero-slide.active { opacity: 1; }
+
+  .hero-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,26,46,0.82) 0%, rgba(43,52,144,0.45) 60%, rgba(233,30,140,0.2) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+    max-width: 900px;
+  }
+
+  .hero-tagline {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 1.5rem;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid rgba(233,30,140,0.4);
+    border-radius: 2px;
+    animation: fadeInDown 1s ease 0.3s both;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 1s ease 0.5s both;
+  }
+
+  .hero-title span { color: var(--white); font-weight: 600; }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 2.5rem;
+    animation: fadeInUp 1s ease 0.7s both;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 1s ease 0.9s both;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2.2rem;
+    background: var(--pink);
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: all 0.3s;
+    border: 2px solid var(--pink);
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--pink);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(233,30,140,0.3);
+  }
+
+  .btn-outline {
+    padding: 0.85rem 2.2rem;
+    background: transparent;
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    border: 2px solid rgba(255,255,255,0.5);
+    transition: all 0.3s;
+  }
+
+  .btn-outline:hover {
+    border-color: white;
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+  }
+
+  .hero-indicators {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.6rem;
+    z-index: 10;
+  }
+
+  .indicator {
+    width: 28px; height: 3px;
+    background: rgba(255,255,255,0.35);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .indicator.active {
+    background: var(--pink);
+    width: 48px;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 5%;
+    z-index: 10;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: bounce 2s ease infinite;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+  }
+
+  /* ===== SECTIONS BASE ===== */
+  section { padding: 6rem 5%; }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    color: var(--gray);
+    font-weight: 300;
+    margin-bottom: 3rem;
+  }
+
+  /* ===== BEPROTEL / ABOUT ===== */
+  #beprotel {
+    background: var(--light);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #beprotel::before {
+    content: 'B';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40vw;
+    font-weight: 700;
+    color: rgba(43,52,144,0.025);
+    top: -10%;
+    right: -5%;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #555566;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-text p strong { color: var(--navy); font-weight: 600; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 3px solid var(--pink);
+    box-shadow: 0 4px 20px rgba(43,52,144,0.06);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(43,52,144,0.12);
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+
+  /* About visual */
+  .about-visual {
+    position: relative;
+  }
+
+  .about-img-main {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(43,52,144,0.15);
+  }
+
+  .about-img-accent {
+    position: absolute;
+    bottom: -2rem;
+    left: -2rem;
+    width: 200px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 4px solid white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .about-badge {
+    position: absolute;
+    top: 2rem; right: -1rem;
+    background: var(--pink);
+    color: white;
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(233,30,140,0.3);
+  }
+
+  .about-badge strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .about-badge span {
+    font-size: 0.7rem;
+    opacity: 0.85;
+    letter-spacing: 0.05em;
+  }
+
+  /* Alianzas */
+  .alianzas {
+    margin-top: 5rem;
+    text-align: center;
+  }
+
+  .alianzas h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--navy);
+    margin-bottom: 2rem;
+    font-weight: 400;
+  }
+
+  .alianzas-track {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .alianza-item {
+    padding: 0.6rem 1.5rem;
+    background: white;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--navy);
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 15px rgba(43,52,144,0.07);
+    border: 1px solid rgba(43,52,144,0.08);
+    transition: all 0.3s;
+  }
+
+  .alianza-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(43,52,144,0.12);
+    border-color: var(--navy);
+  }
+
+  /* Features grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 20px rgba(43,52,144,0.06);
+    transition: all 0.35s;
+    border-bottom: 3px solid transparent;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(43,52,144,0.12);
+    border-bottom-color: var(--pink);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .feature-card p {
+    font-size: 0.82rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ===== PROYECTOS ===== */
+  #proyectos {
+    background: var(--dark);
+    color: white;
+  }
+
+  #proyectos .section-title { color: white; }
+  #proyectos .section-subtitle { color: rgba(255,255,255,0.5); }
+
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .proyecto-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+  }
+
+  .proyecto-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .proyecto-card:hover .proyecto-img { transform: scale(1.08); }
+
+  .proyecto-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,26,46,0.95) 0%, rgba(43,52,144,0.4) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    transition: all 0.4s;
+  }
+
+  .proyecto-card:hover .proyecto-overlay { background: linear-gradient(to top, rgba(26,26,46,0.98) 0%, rgba(43,52,144,0.6) 60%, rgba(233,30,140,0.2) 100%); }
+
+  .proyecto-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 0.4rem;
+  }
+
+  .proyecto-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .proyecto-card p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s, opacity 0.4s;
+    opacity: 0;
+  }
+
+  .proyecto-card:hover p {
+    max-height: 100px;
+    opacity: 1;
+  }
+
+  /* ===== SERVICIOS ===== */
+  #servicios { background: var(--white); }
+
+  .servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .servicio-card {
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    background: var(--light);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    border: 1px solid rgba(43,52,144,0.06);
+  }
+
+  .servicio-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(to right, var(--navy), var(--pink));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+
+  .servicio-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(43,52,144,0.12); }
+  .servicio-card:hover::before { transform: scaleX(1); }
+
+  .servicio-icon-wrap {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--navy), rgba(43,52,144,0.7));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .servicio-card:hover .servicio-icon-wrap {
+    background: linear-gradient(135deg, var(--pink), rgba(233,30,140,0.7));
+    transform: rotate(5deg) scale(1.05);
+  }
+
+  .servicio-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+
+  .servicio-card p {
+    font-size: 0.88rem;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  /* ===== EQUIPO ===== */
+  #equipo { background: var(--light); }
+
+  .equipo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .team-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(43,52,144,0.06);
+    transition: all 0.4s;
+  }
+
+  .team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(43,52,144,0.14);
+  }
+
+  .team-img-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--navy) 0%, #1a1f6e 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .team-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    border: 3px solid rgba(255,255,255,0.3);
+  }
+
+  .team-card-body {
+    padding: 1.5rem;
+  }
+
+  .team-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.2rem;
+  }
+
+  .team-role {
+    font-size: 0.75rem;
+    color: var(--pink);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .team-bio {
+    font-size: 0.82rem;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .team-contact a {
+    font-size: 0.78rem;
+    color: var(--navy);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.2rem;
+    transition: color 0.2s;
+  }
+
+  .team-contact a:hover { color: var(--pink); }
+
+  /* ===== CONTACTO ===== */
+  #contacto {
+    background: var(--dark);
+    color: white;
+  }
+
+  #contacto .section-title { color: white; }
+
+  .contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .contacto-form { }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--pink);
+    background: rgba(233,30,140,0.06);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 120px; }
+
+  .btn-send {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--pink), #c2187a);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+  }
+
+  .btn-send:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(233,30,140,0.4);
+  }
+
+  .contacto-info { }
+
+  .info-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+
+  .info-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .info-text h4 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 0.3rem;
+  }
+
+  .info-text p, .info-text a {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .info-text a:hover { color: white; }
+
+  .social-links-footer {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 2.5rem;
+  }
+
+  .social-link {
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+
+  .social-link:hover {
+    background: var(--pink);
+    border-color: var(--pink);
+    transform: translateY(-3px);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #0f0f1a;
+    padding: 2rem 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  footer img { height: 36px; opacity: 0.7; }
+
+  footer p {
+    color: rgba(255,255,255,0.35);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* ===== HAMBURGER (mobile) ===== */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px; height: 2px;
+    background: var(--navy);
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .nav-links, .nav-social { display: none; }
+    .hamburger { display: flex; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .proyectos-grid, .servicios-grid { grid-template-columns: 1fr 1fr; }
+    .equipo-grid { grid-template-columns: 1fr 1fr; }
+    .contacto-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .proyectos-grid, .servicios-grid, .equipo-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: 2.5rem; }
+  }
+
+  /* ===== DIVIDER ===== */
+  .section-divider {
+    width: 50px; height: 3px;
+    background: linear-gradient(to right, var(--navy), var(--pink));
+    border-radius: 2px;
+    margin: 0.5rem 0 2rem;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#inicio" class="nav-logo">
+    <img src="fotos/logo-vertical (1).png" alt="Beprotel" id="navLogo">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#beprotel">Beprotel</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="nav-social">
+    <a href="https://www.facebook.com/Beprotel/" target="_blank" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <a href="https://www.instagram.com/beprotel/" target="_blank" title="Instagram">
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="https://wa.me/5214776419165" target="_blank" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</div>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-slider">
+    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1800&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1800&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1464207687429-7505649dae38?w=1800&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1800&q=80')"></div>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-tagline">Smart Business</span>
+    <h1 class="hero-title">Tu mejor<br><span>compañero</span> de viaje</h1>
+    <p class="hero-subtitle">Servicios Integrales Ejecutivos y Turísticos · Expertos en logística de viaje</p>
+    <div class="hero-ctas">
+      <a href="#servicios" class="btn-primary">Nuestros Servicios</a>
+      <a href="#contacto" class="btn-outline">Contáctanos</a>
+    </div>
+  </div>
+
+  <div class="hero-indicators">
+    <div class="indicator active" onclick="goSlide(0)"></div>
+    <div class="indicator" onclick="goSlide(1)"></div>
+    <div class="indicator" onclick="goSlide(2)"></div>
+    <div class="indicator" onclick="goSlide(3)"></div>
+    <div class="indicator" onclick="goSlide(4)"></div>
+  </div>
+
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- BEPROTEL / ABOUT -->
+<section id="beprotel">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p class="section-label">Quiénes somos</p>
+      <h2 class="section-title">Somos Profesionales</h2>
+      <div class="section-divider"></div>
+      <p>Ofrecemos un <strong>servicio personalizado y a la medida</strong> de tus necesidades. Hemos gestionado eficientemente eventos, viajes corporativos y sociales masivos en los mejores destinos turísticos del país.</p>
+      <p>Hemos colaborado con Instituciones y Empresas de todo tipo, <strong>nuestra prioridad es encontrar la solución que más se ajuste a sus necesidades</strong> sin importar el número de personas o el destino que requieran.</p>
+      <p>Contamos con una <strong>amplia cartera de socios comerciales</strong> que incluye hoteles, aerolíneas y todo tipo de proveedores del sector turístico en cualquier parte del mundo.</p>
+
+      <div class="about-stats">
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Años de experiencia</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <div class="stat-number">300+</div>
+          <div class="stat-label">Eventos gestionados</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Clientes satisfechos</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-4">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Destinos disponibles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-visual reveal reveal-delay-2">
+      <img class="about-img-main" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80" alt="Hotel ejecutivo">
+      <img class="about-img-accent" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80" alt="Viaje ejecutivo">
+      <div class="about-badge">
+        <strong>20+</strong>
+        <span>Años de<br>experiencia</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features-grid">
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">🏆</div>
+      <h4>Expertos</h4>
+      <p>Agentes con vasta experiencia en el sector turístico</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">🎯</div>
+      <h4>Orientación</h4>
+      <p>Asesoría personalizada para garantizar los mejores resultados</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon">🤝</div>
+      <h4>Alianzas</h4>
+      <p>Socios comerciales que nos permiten darte las mejores ofertas</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-4">
+      <div class="feature-icon">✈️</div>
+      <h4>Transporte</h4>
+      <p>Coordinamos el traslado a tu destino por tierra, aire o mar</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-5">
+      <div class="feature-icon">🏨</div>
+      <h4>Hospedaje</h4>
+      <p>Desde una persona hasta grupos completos</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">🎪</div>
+      <h4>Eventos</h4>
+      <p>Nos encargamos de todo lo necesario para tu evento</p>
+    </div>
+  </div>
+
+  <!-- Alianzas -->
+  <div class="alianzas reveal">
+    <h3>Algunas de nuestras alianzas</h3>
+    <div class="alianzas-track">
+      <div class="alianza-item">Aeromexico</div>
+      <div class="alianza-item">Hilton Hotels</div>
+      <div class="alianza-item">Marriott</div>
+      <div class="alianza-item">Copa Airlines</div>
+      <div class="alianza-item">Hyatt</div>
+      <div class="alianza-item">Iberia</div>
+      <div class="alianza-item">Wyndham</div>
+      <div class="alianza-item">Best Western</div>
+      <div class="alianza-item">IHG Hotels</div>
+      <div class="alianza-item">NH Hotels</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section id="proyectos">
+  <div style="text-align:center; margin-bottom:3rem;">
+    <p class="section-label">Clientes Satisfechos</p>
+    <h2 class="section-title">Proyectos</h2>
+    <div class="section-divider" style="margin:0.5rem auto 0;"></div>
+  </div>
+
+  <div class="proyectos-grid">
+    <div class="proyecto-card reveal reveal-delay-1">
+      <img class="proyecto-img" src="https://beprotel.com/wp-content/uploads/2014/09/pentecostal_bienvenida.jpg" alt="Iglesia Pentecostal">
+      <div class="proyecto-overlay">
+        <span class="proyecto-tag">Evento Masivo · León, Gto.</span>
+        <h3>Encuentro Iglesia Pentecostal</h3>
+        <p>Gestión del hospedaje y logística completa para un evento de varios días con cientos de participantes del 26 al 29 de Julio de 2019.</p>
+      </div>
+    </div>
+    <div class="proyecto-card reveal reveal-delay-2">
+      <img class="proyecto-img" src="https://beprotel.com/wp-content/uploads/2014/09/fimoda_evento.jpg" alt="FIMODA">
+      <div class="proyecto-overlay">
+        <span class="proyecto-tag">Evento Internacional</span>
+        <h3>FIMODA</h3>
+        <p>Evento internacional de moda con representantes distinguidos de la industria. Escaparate para diseñadores y fabricantes de todo el mundo.</p>
+      </div>
+    </div>
+    <div class="proyecto-card reveal reveal-delay-3">
+      <img class="proyecto-img" src="https://beprotel.com/wp-content/uploads/2014/04/potosi_cover-1.jpg" alt="Seguros Potosí">
+      <div class="proyecto-overlay">
+        <span class="proyecto-tag">Evento Corporativo</span>
+        <h3>Seguros Potosí</h3>
+        <p>Hospedaje para más de 300 personas y transporte aéreo en dos charters privados. Coordinación completa del evento corporativo.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div style="text-align:center; margin-bottom:1rem;">
+    <p class="section-label">Los Más Destacados</p>
+    <h2 class="section-title reveal">Algunos de Nuestros Servicios</h2>
+    <p class="section-subtitle reveal">Somos especialistas en viaje ejecutivo</p>
+  </div>
+
+  <div class="servicios-grid">
+    <div class="servicio-card reveal reveal-delay-1">
+      <div class="servicio-icon-wrap">🏨</div>
+      <h3>Hospedaje</h3>
+      <p>Te ofrecemos las mejores alternativas para estancias cortas y largas, desde una persona hasta grupos completos en los destinos más importantes.</p>
+    </div>
+    <div class="servicio-card reveal reveal-delay-2">
+      <div class="servicio-icon-wrap">✈️</div>
+      <h3>Transporte</h3>
+      <p>Nos encargamos de llevarte a tu destino deseado por tierra, aire o mar con la mayor comodidad y las mejores tarifas disponibles.</p>
+    </div>
+    <div class="servicio-card reveal reveal-delay-3">
+      <div class="servicio-icon-wrap">🗺️</div>
+      <h3>Logística de Viaje</h3>
+      <p>Nos encargamos de todos los detalles para que tú no tengas que preocuparte por nada durante tu viaje o evento.</p>
+    </div>
+    <div class="servicio-card reveal reveal-delay-4">
+      <div class="servicio-icon-wrap">👤</div>
+      <h3>Atención Personalizada</h3>
+      <p>Uno de nuestros agentes se encargará de brindarte orientación y coordinación para sobrepasar las expectativas de tu viaje.</p>
+    </div>
+    <div class="servicio-card reveal reveal-delay-5">
+      <div class="servicio-icon-wrap">🎪</div>
+      <h3>Eventos</h3>
+      <p>Convertimos cualquier convención ejecutiva, de negocios o evento masivo en una experiencia de calidad e irrepetible.</p>
+    </div>
+    <div class="servicio-card reveal reveal-delay-1">
+      <div class="servicio-icon-wrap">💎</div>
+      <h3>Mejores Tarifas</h3>
+      <p>Nuestros agentes siempre buscan las mejores tarifas y calidad del mercado para ofrecerte soluciones premium a precios competitivos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section id="equipo">
+  <div style="text-align:center; margin-bottom:3rem;">
+    <p class="section-label">De Especialistas</p>
+    <h2 class="section-title reveal">Nuestro Equipo</h2>
+    <div class="section-divider" style="margin:0.5rem auto 0;"></div>
+  </div>
+
+  <div class="equipo-grid">
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-img-wrap" style="background: linear-gradient(135deg, #2B3490, #1a1f6e);">
+        <div class="team-avatar">👨‍💼</div>
+      </div>
+      <div class="team-card-body">
+        <h3>Agustín Frausto</h3>
+        <p class="team-role">Director General</p>
+        <p class="team-bio">Con más de 20 años de experiencia como negociador comercial en el sector turístico. Dinámico y asertivo para conseguir siempre los mejores tratos.</p>
+        <div class="team-contact">
+          <a href="mailto:agustin@beprotel.com">agustin@beprotel.com</a>
+          <a href="tel:524778479112">+52 (477) 847-9112</a>
+        </div>
+      </div>
+    </div>
+  
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-img-wrap" style="background: linear-gradient(135deg, #E91E8C, #a01060);">
+        <div class="team-avatar">👩‍💼</div>
+      </div>
+      <div class="team-card-body">
+        <h3>Cecilia Parada</h3>
+        <p class="team-role">Gerente</p>
+        <p class="team-bio">Experta en relaciones públicas y coordinadora de alianzas comerciales en distintos rubros para siempre darte las mejores oportunidades.</p>
+        <div class="team-contact">
+          <a href="mailto:gerentebjx@beprotel.com">gerentebjx@beprotel.com</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="team-card reveal reveal-delay-4">
+      <div class="team-img-wrap" style="background: linear-gradient(135deg, #1a1a2e, #2B3490);">
+        <div class="team-avatar">👩‍🎨</div>
+      </div>
+      <div class="team-card-body">
+        <h3>Daniela Acosta</h3>
+        <p class="team-role">Asistente</p>
+        <p class="team-bio">Incansable y dinámica para realizar la coordinación necesaria que nos permite mantener nuestros estándares de satisfacción y calidad.</p>
+        <div class="team-contact">
+          <a href="mailto:asistente@beprotel.com">asistente@beprotel.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div style="text-align:center; margin-bottom:3.5rem;">
+    <p class="section-label">Ponte en contacto con nosotros</p>
+    <h2 class="section-title">Contacto</h2>
+    <div class="section-divider" style="margin:0.5rem auto 0;background:linear-gradient(to right,#fff,var(--pink));"></div>
+  </div>
+
+  <div class="contacto-grid">
+    <div class="contacto-form reveal">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;margin-bottom:0.5rem;font-weight:400;">Mándanos un mensaje</h3>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:1.5rem;">Un ejecutivo de ventas te contactará en un plazo de 24 a 48 horas.</p>
+      <div class="form-group">
+        <label>Nombre *</label>
+        <input type="text" placeholder="Tu nombre completo">
+      </div>
+      <div class="form-group">
+        <label>E-mail *</label>
+        <input type="email" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>Teléfono *</label>
+        <input type="tel" placeholder="+52 (###) ###-####">
+      </div>
+      <div class="form-group">
+        <label>Mensaje *</label>
+        <textarea placeholder="¿En qué podemos ayudarte?"></textarea>
+      </div>
+      <button class="btn-send">Enviar Mensaje</button>
+    </div>
+
+    <div class="contacto-info reveal reveal-delay-2">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;margin-bottom:2rem;font-weight:400;">Información de Contacto</h3>
+
+      <div class="info-item">
+        <div class="info-icon">📍</div>
+        <div class="info-text">
+          <h4>Dirección</h4>
+          <p>Av Roma #502, Col. Andrade,<br>37020 León, Gto.</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📞</div>
+        <div class="info-text">
+          <h4>Teléfono</h4>
+          <a href="tel:524778479112">+52 (477) 847-9112</a>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">💬</div>
+        <div class="info-text">
+          <h4>WhatsApp</h4>
+          <a href="https://wa.me/+5214776419165">+52 (477) 641-9165</a>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">✉️</div>
+        <div class="info-text">
+          <h4>Correo</h4>
+          <a href="mailto:contacto@beprotel.com">contacto@beprotel.com</a>
+        </div>
+      </div>
+
+      <div class="nav-social">
+    <a href="https://www.facebook.com/Beprotel/" target="_blank" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <a href="https://www.instagram.com/beprotel/" target="_blank" title="Instagram">
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="https://wa.me/5214776419165" target="_blank" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="fotos/logo-horizontal.png" alt="Beprotel">
+  <p>BEPROTEL smart business © 2025</p>
+  <p style="color:rgba(255,255,255,0.2);font-size:0.72rem;">Servicios Integrales Ejecutivos y Turísticos</p>
+</footer>
+
+<script>
+// Hero slider
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const indicators = document.querySelectorAll('.indicator');
+
+function goSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  indicators[currentSlide].classList.remove('active');
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  indicators[currentSlide].classList.add('active');
+  updateHeroText();
+}
+
+const heroTexts = [
+  { tag: 'Smart Business', title: 'Tu mejor<br><span>compañero</span> de viaje', sub: 'Expertos en logística de viaje ejecutivo' },
+  { tag: 'Hospedaje Premium', title: 'Tu opción<br><span>perfecta</span> en hospedaje', sub: 'Desde una persona hasta grupos completos' },
+  { tag: 'Eventos Corporativos', title: 'El éxito<br>de tu <span>evento</span>', sub: 'Convenciones ejecutivas y eventos masivos' },
+  { tag: 'Equipo Experto', title: 'Tu equipo<br>de <span>expertos</span>', sub: 'Más de 20 años de experiencia en turismo' },
+  { tag: 'Beprotel', title: 'Somos<br><span>Beprotel</span>', sub: 'Servicios Integrales Ejecutivos y Turísticos' },
+];
+
+function updateHeroText() {
+  const t = heroTexts[currentSlide];
+  document.querySelector('.hero-tagline').textContent = t.tag;
+  document.querySelector('.hero-title').innerHTML = t.title;
+  document.querySelector('.hero-subtitle').textContent = t.sub;
+}
+
+setInterval(() => goSlide((currentSlide + 1) % slides.length), 5000);
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Reveal on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
